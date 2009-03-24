@@ -68,7 +68,6 @@ function keyword_rules_density($form_values) {
  * Defines the settings form
  */
 function keyword_rules_settings() {
-  $rules = boomerang_seo_rules_register_seo_rules();
   $form = array();
   $fields = array();
   $fieldarr = content_fields();
