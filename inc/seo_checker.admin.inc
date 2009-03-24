@@ -23,7 +23,7 @@ function seo_checker_perm() {
  */
 function seo_checker_settings() {
   /* load the required js and css files */
-  _seo_checker_load_slider();
+ _seo_checker_load_slider();
 
   /* get the rules and create the fieldset with the sliders */
   $rules = module_invoke_all('register_seo_rules');
@@ -70,7 +70,9 @@ function seo_checker_settings() {
  * The slider requires some java scripts and css to be loaded
  */
 function _seo_checker_load_slider() {
-  jquery_ui_add('ui.slider', 'none');
+  if (module_exists('jquery_ui')) {
+    jquery_ui_add('ui.slider', 'none');
+    drupal_add_js(drupal_get_path('module', 'seo_checker') ."/js/slider.js");
+  }
   drupal_add_css(drupal_get_path('module', 'seo_checker') ."/css/slider.css");
-  drupal_add_js(drupal_get_path('module', 'seo_checker') ."/js/slider.js");
 }

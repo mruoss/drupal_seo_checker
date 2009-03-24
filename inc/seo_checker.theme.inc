@@ -21,6 +21,7 @@ function seo_checker_elements() {
   $type['slider'] = array(
     '#input' => TRUE,
     '#steps' => 100,
+    '#size' => 3,
   );
   $type['seo_check_results'] = array(
     '#results' => array(),
@@ -49,13 +50,17 @@ function seo_checker_theme() {
  * Implementation of template_preprocess().
  */
 function template_preprocess_slider(&$args) {
-  switch ($args['element']['#slider_type']) {
-    case 'at_least':
-      $args['template_files'][] = 'slider-atleast';
-      break;
-    case 'range':
-      $args['template_files'][] = 'slider-range';
-      break;
+  if (module_exists('jquery_ui')) {
+    switch ($args['element']['#slider_type']) {
+      case 'at_least':
+        $args['template_files'][] = 'slider-atleast';
+        break;
+      case 'range':
+        $args['template_files'][] = 'slider-range';
+        break;
+    }
+  } else {
+    $args['template_files'][] = 'slider-nojquery';
   }
 }
 
