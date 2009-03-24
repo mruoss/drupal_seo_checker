@@ -1,0 +1,14 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Installer for the SEO Compliance Checker
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function seo_checker_install() {
+  variable_set('jquery_update_compression_type', 'none');
+}
