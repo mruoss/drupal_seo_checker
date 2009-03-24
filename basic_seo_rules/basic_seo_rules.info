@@ -1,0 +1,6 @@
+; $Id$
+name = 'Basic SEO Rules'
+description = 'Basic rules for the SEO compliance checker module'
+core = 6.x
+dependencies[] = "seo_checker"
+package = "SEO Compliance Checker"

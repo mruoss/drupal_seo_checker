@@ -1,0 +1,76 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Contains the functions used to theme the outputs of this module.
+ *
+ * Currently this modules implements two custom form elements. The first
+ * is a slider that is used on the configuration page to set the thresholds.
+ *
+ * The second element is used to display the results of the checks after
+ * submitting the node_form.
+ */
+
+
+/**
+ * Defines the slider form element and its default values
+ */
+function seo_checker_elements() {
+  $type = array();
+  $type['slider'] = array(
+    '#input' => TRUE,
+    '#steps' => 100,
+  );
+  $type['seo_check_results'] = array(
+    '#results' => array(),
+  );
+  return $type;
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function seo_checker_theme() {
+  $path = drupal_get_path('module', 'seo_checker');
+  return array(
+    'slider' => array(
+       'template' => 'slider-atleast',
+       'path' => "$path/theme",
+       'arguments' => array('element' => NULL),
+    ),
+    'seo_check_results' => array(
+      'arguments' => array('element' => NULL),
+    )
+  );
+}
+
+/**
+ * Implementation of template_preprocess().
+ */
+function template_preprocess_slider(&$args) {
+  switch ($args['element']['#slider_type']) {
+    case 'at_least':
+      $args['template_files'][] = 'slider-atleast';
+      break;
+    case 'range':
+      $args['template_files'][] = 'slider-range';
+      break;
+  }
+}
+
+/**
+ * By default the check results are themed as a normal form item whose
+ * value contains the check results, rendered as a table.
+ */
+function theme_seo_check_results($element) {
+  $output .= theme(
+    'table',
+    array(t('Rule'), t('Message'), t('Achieved'), t('Required'), t('Passed')),
+    $element['#results'],
+    array()
+  );
+  $element['#type'] = 'item';
+  $element['#value'] = $output;
+  return drupal_render($element);
+}
