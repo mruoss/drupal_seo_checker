@@ -57,7 +57,7 @@ function seo_checker_settings() {
       '#default_value' => seo_checker_get_rule_threshold($rule, $rid),
       '#description' => check_plain($rule['description']),
     );
-    if ($rule['threshold type'] == 'bool') {
+    if ($rule['type'] == 'bool') {
       $form['thresholds']['seo_threshold_'. $rid]['#steps'] = 1;
     }
   }
@@ -71,6 +71,6 @@ function seo_checker_settings() {
  */
 function _seo_checker_load_slider() {
   jquery_ui_add('ui.slider', 'none');
-  drupal_add_css(drupal_get_path('module', 'seo_checker') ."/css/slider.css");
+  drupal_add_css(drupal_get_path('module', 'jquery_ui') ."/jquery.ui/themes/flora/flora.all.css");
   drupal_add_js(drupal_get_path('module', 'seo_checker') ."/js/slider.js");
 }
