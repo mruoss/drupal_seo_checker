@@ -69,7 +69,7 @@ function template_preprocess_slider(&$args) {
  * value contains the check results, rendered as a table.
  */
 function theme_seo_check_results($element) {
-  $output .= theme(
+  $output = theme(
     'table',
     array(t('Rule'), t('Message'), t('Achieved'), t('Required'), t('Passed')),
     $element['#results'],
