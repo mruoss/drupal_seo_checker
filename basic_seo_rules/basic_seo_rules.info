@@ -1,6 +1,7 @@
 ; $Id$
 name = 'Basic SEO Rules'
 description = 'Basic rules for the SEO compliance checker module'
-core = 6.x
+core = 7.x
 dependencies[] = "seo_checker"
+files[] = basic_seo_rules.module
 package = "SEO Compliance Checker"

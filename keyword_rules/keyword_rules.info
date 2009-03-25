@@ -1,7 +1,8 @@
 ; $Id$
-name = 'Keyword Rules'
-description = 'Keyword rule checks for the SEO compliance checker module'
-core = 6.x
-dependencies[] = "seo_checker"
-dependencies[] = "content"
+name = Keyword Rules
+description = Keyword rule checks for the SEO compliance checker module
+core = 7.x
+dependencies[] = seo_checker
+dependencies[] = cck
+files[] = keyword_rules.module
 package = "SEO Compliance Checker"

@@ -1,5 +1,12 @@
 ; $Id$
-name = 'SEO Compliance Checker'
-description = 'Checks the SEO compliance of a node at it's creation/modification'
-core = "6.x"
-package = "SEO Compliance Checker"
+name = SEO Compliance Checker
+description = Checks the SEO compliance of a node at it's creation/modification
+core = 7.x
+files[] = seo_checker.module
+files[] = seo_checker.install
+files[] = inc/seo_checker.admin.inc
+files[] = inc/seo_checker.theme.inc
+files[] = theme/slider-atleast.tpl.php
+files[] = theme/slider-nojquery.tpl.php
+files[] = theme/slider-range.tpl.php
+package = SEO Compliance Checker

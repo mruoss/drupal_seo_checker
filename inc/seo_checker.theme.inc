@@ -17,14 +17,15 @@
  * Defines the slider form element and its default values
  */
 function seo_checker_elements() {
-  $type = array();
   $type['slider'] = array(
     '#input' => TRUE,
     '#steps' => 100,
     '#size' => 3,
+    '#theme' => 'slider',
   );
   $type['seo_check_results'] = array(
     '#results' => array(),
+    '#theme' => 'seo_check_results',
   );
   return $type;
 }
@@ -32,8 +33,7 @@ function seo_checker_elements() {
 /**
  * Implementation of hook_theme().
  */
-function seo_checker_theme() {
-  $path = drupal_get_path('module', 'seo_checker');
+function seo_checker_theme($existing, $type, $theme, $path) {
   return array(
     'slider' => array(
        'template' => 'slider-atleast',
@@ -69,13 +69,12 @@ function template_preprocess_slider(&$args) {
  * value contains the check results, rendered as a table.
  */
 function theme_seo_check_results($element) {
-  $output = theme(
+  $output = '<b>'.t('SEO Check Results').':</b>';
+  $output .= theme(
     'table',
     array(t('Rule'), t('Message'), t('Achieved'), t('Required'), t('Passed')),
     $element['#results'],
     array()
   );
-  $element['#type'] = 'item';
-  $element['#value'] = $output;
-  return drupal_render($element);
+  return $output;
 }

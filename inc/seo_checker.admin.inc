@@ -48,7 +48,6 @@ function seo_checker_settings() {
     '#collapsible' => TRUE,
     '#description' => t('For the following rules, set the threshold in % where the test should be considered as passed. Depending on the type of the rule, you can either chose 0 or 100 sometimes a value in between. <b>A threshold of 0% disables a test.</b> Results of disabled tests will not be displayed.'),
   );
-
   foreach ($rules as $rid => $rule) {
     $form['thresholds']['seo_threshold_'. $rid] = array(
       '#type' => 'slider',

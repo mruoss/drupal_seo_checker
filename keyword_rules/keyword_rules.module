@@ -70,7 +70,9 @@ function keyword_rules_density($form_values) {
 function keyword_rules_settings() {
   $form = array();
   $fields = array();
-  $fieldarr = content_fields();
+  //TODO: taxonomy based?
+  $fieldarr = field_info_instances();
+  
   foreach ($fieldarr as $label => $field) {
     $fields[$label] = $field['field_name'];
   }
