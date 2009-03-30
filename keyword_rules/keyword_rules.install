@@ -6,13 +6,14 @@
  * Installer for the Keyword Rules for the SEO Checker
  */
 
+
+require_once(drupal_get_path('module', 'content') .'/includes/content.crud.inc');
 define('SEO_KEYWORD_FIELD_NAME', 'field_keywords');
 
 /**
  * Implementation of hook_install().
  */
 function keyword_rules_install() {
-  require_once(drupal_get_path('module', 'content') .'/includes/content.crud.inc');
 
   /* create a cck field and add it to the first content type. */
   $type = array_shift(node_get_types());

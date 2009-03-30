@@ -18,7 +18,6 @@ The core module comes along with such a submodule providing checks for some
 basic SEO rules. There is however a simple way to extend the functionality
 of the checker by adding more such rules in further submodules.
 
-
 Defining further SEO rules:
 ===========================
 A submodule providing rules for the seo_checker should implement the hook
