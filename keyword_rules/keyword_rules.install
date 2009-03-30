@@ -1,0 +1,36 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Installer for the Keyword Rules for the SEO Checker
+ */
+
+define('SEO_KEYWORD_FIELD_NAME', 'field_keywords');
+
+/**
+ * Implementation of hook_install().
+ */
+function keyword_rules_install() {
+  require_once(drupal_get_path('module', 'content') .'/includes/content.crud.inc');
+
+  /* create a cck field and add it to the first content type. */
+  $type = array_shift(node_get_types());
+  $field = array(
+    'field_name' => SEO_KEYWORD_FIELD_NAME,
+    'type_name' => $type->type,
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+  );
+  content_field_instance_create($field);
+  variable_set('seo_keyword_field_type', $type->type);
+  drupal_set_message(t('A new cck field of type text_textfield has been created and assigned to the content type "%s"', array('%s' => $type->name)));
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function keyword_rules_uninstall() {
+  content_field_instance_delete(SEO_KEYWORD_FIELD_NAME, variable_get('seo_keyword_field_type', 'page'));
+  variable_del('seo_keyword_field_type');
+}
