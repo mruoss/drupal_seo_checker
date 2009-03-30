@@ -8,30 +8,37 @@
 
 
 require_once(drupal_get_path('module', 'content') .'/includes/content.crud.inc');
-define('SEO_KEYWORD_FIELD_NAME', 'field_keywords');
+define('SEO_KEYWORD_FIELD_NAME', 'field_seo_keywords');
 
 /**
  * Implementation of hook_install().
  */
 function keyword_rules_install() {
-
-  /* create a cck field and add it to the first content type. */
-  $type = array_shift(node_get_types());
+  /* create cck fields and assign them to page and story. */
+  $types = array_keys(node_get_types());
   $field = array(
     'field_name' => SEO_KEYWORD_FIELD_NAME,
-    'type_name' => $type->type,
+    'type_name' => 'page',
     'type' => 'text',
     'widget_type' => 'text_textfield',
+    'label' => t('Keywords'),
+    'description' => t('Enter a comma separated list of keywords describing the content of this page'),
   );
-  content_field_instance_create($field);
-  variable_set('seo_keyword_field_type', $type->type);
-  drupal_set_message(t('A new cck field of type text_textfield has been created and assigned to the content type "%s"', array('%s' => $type->name)));
+  if (in_array('page', $types)) {
+    content_field_instance_create($field);
+    drupal_set_message(t('A new cck field called <b>Keywords</b> has been created and assigned to the content type "page".'));
+  }
+  if (in_array('story', $types)) {
+    $field['type_name'] = 'story';
+    content_field_instance_create($field);
+    drupal_set_message(t('A new cck field called <b>Keywords</b> has been created and assigned to the content type "story".'));
+  }
 }
 
 /**
  * Implementation of hook_uninstall().
  */
 function keyword_rules_uninstall() {
-  content_field_instance_delete(SEO_KEYWORD_FIELD_NAME, variable_get('seo_keyword_field_type', 'page'));
-  variable_del('seo_keyword_field_type');
+  content_field_instance_delete(SEO_KEYWORD_FIELD_NAME, 'page');
+  content_field_instance_delete(SEO_KEYWORD_FIELD_NAME, 'story');
 }
