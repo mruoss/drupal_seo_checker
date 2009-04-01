@@ -40,9 +40,9 @@ function keyword_rules_install() {
   /* if no field was created, display a warning to the user */
   if (!$field_created) {
     drupal_set_message(t('
-      In order to be able to use the Keyword Rules you have to create a CCK field 
+      In order to be able to use the Keyword Rules you have to create a CCK field
       for keywords and assign it to the content types that use the SEO Checker.
-      Afterwards you should select this field in the '. l('Keyword Rules settings', 
+      Afterwards you should select this field in the '. l('Keyword Rules settings',
       'admin/settings/seo_checker/keyword_rules') .'.'), 'warning');
   }
 }
@@ -51,6 +51,10 @@ function keyword_rules_install() {
  * Implementation of hook_uninstall().
  */
 function keyword_rules_uninstall() {
+  include_once(drupal_get_path('module', 'seo_checker') .'/seo_checker.install');
   content_field_instance_delete(SEO_KEYWORD_FIELD_NAME, 'page');
   content_field_instance_delete(SEO_KEYWORD_FIELD_NAME, 'story');
+  variable_del('keyword_rules_keywords_field');
+
+  seo_checker_submodule_uninstall('keyword_rules');
 }

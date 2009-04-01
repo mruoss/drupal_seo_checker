@@ -59,7 +59,8 @@ function template_preprocess_slider(&$args) {
         $args['template_files'][] = 'slider-range';
         break;
     }
-  } else {
+  }
+  else {
     $args['template_files'][] = 'slider-nojquery';
   }
 }

@@ -23,7 +23,7 @@ function seo_checker_perm() {
  */
 function seo_checker_settings() {
   /* load the required js and css files */
- _seo_checker_load_slider();
+  _seo_checker_load_slider();
 
   /* get the rules and create the fieldset with the sliders */
   $rules = module_invoke_all('register_seo_rules');

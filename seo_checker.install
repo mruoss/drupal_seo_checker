@@ -12,3 +12,30 @@
 function seo_checker_install() {
   variable_set('jquery_update_compression_type', 'none');
 }
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function seo_checker_uninstall() {
+  /* delete variables for types */
+  $types = node_get_types();
+  foreach ($types as $type) {
+    variable_del('seo_checker_'. $type->type);
+  }
+
+  variable_del('seo_checker_allow_failures');
+}
+
+/**
+ * This function should be called by modules that implement SEO rules
+ * when they are uninstalled. It cleans up their variables.
+ * @param string $module
+ *   The name of the submodule.
+ */
+function seo_checker_submodule_uninstall($modulename) {
+  /* delete variables holding thresholds */
+  $rules = module_invoke($modulename, 'register_seo_rules');
+  foreach ($rules as $rid => $rule) {
+    variable_del('seo_threshold_'. $rid);
+  }
+}
