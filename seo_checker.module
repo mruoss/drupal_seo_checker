@@ -87,7 +87,7 @@ function seo_checker_perform_checks(&$form, $form_values) {
   $rules = module_invoke_all('register_seo_rules');
   foreach ($rules as $rid => $rule) {
     if (!function_exists($rule['callback'])) {
-      drupal_set_message(sprintf(t('The function <i>%s()</i> for seo_checker rule <b>%s</b> was not found.'), $rule['callback'], check_plain($rule['name'])), 'error');
+      drupal_set_message(sprintf(t('The function <i>%s()</i> for seo_checker rule <b>%s</b> was not found.'), $rule['callback'], strip_tags(check_markup($rule['name']))), 'error');
       continue;
     }
 
@@ -108,7 +108,7 @@ function seo_checker_perform_checks(&$form, $form_values) {
     /* check if the submitted node has passed the test. */
     $passed = $check_result >= $threshold[0] && $check_result <= $threshold[1] ? 'passed' : 'failed';
     $data = array(
-      'rule' => check_plain($rule['name']),
+      'rule' => strip_tags(check_markup($rule['name'])),
       'message' => $rule[$passed .' feedback'],
       'achieved' => $check_result .'%',
       'required' => $threshold_text,

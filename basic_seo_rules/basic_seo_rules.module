@@ -12,8 +12,8 @@
  */
 function basic_seo_rules_register_seo_rules() {
   $rules['alt_attributes'] = array(
-    'name' => t('Alt attributes in <img> - tags'),
-    'description' => t('Checks if all the <img> tags in the body have an alt attribute.'),
+    'name' => t('Alt attributes in &lt;img&gt; - tags'),
+    'description' => t('Checks if all the &lt;img&gt; tags in the body have an alt attribute.'),
     'threshold type' => 'at_least',
     'default threshold' => 100,
     'callback' => 'basic_seo_rules_alt_attribute',
@@ -21,8 +21,8 @@ function basic_seo_rules_register_seo_rules() {
     'failed feedback' => t('Test failed, please make sure your images contain an alternative text.'),
   );
   $rules['title_attributes'] = array(
-    'name' => t('Title attributes in <a href> - tags'),
-    'description' => t('Checks if all the <a href> tags have a title attribute.'),
+    'name' => t('Title attributes in &lt;a href&gt; - tags'),
+    'description' => t('Checks if all the &lt;a href&gt; tags have a title attribute.'),
     'threshold type' => 'at_least',
     'default threshold' => 100,
     'callback' => 'basic_seo_rules_title_attribute',

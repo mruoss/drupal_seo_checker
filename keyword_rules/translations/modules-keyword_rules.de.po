@@ -29,6 +29,14 @@ msgstr "Regeln mit Schlüsselwörtern"
 msgid "Settings for the keyword SEO rules module."
 msgstr "Einstellungen für das Modul für SEO Regeln mit Schlüsselwörtern"
 
+#: keyword_rules.module:33
+msgid "Keyword density in the body"
+msgstr "Dichte der Schlüsselwörter im Body"
+
+#: keyword_rules.module:34
+msgid "Checks the density of keywords over the the body of a page. Remark: too high density is not a good SEO."
+msgstr "Überprüft, ob die Dichte der Schlüsselwörter im Body in einem bestimmten Bereich liegt. Zu beachten: Eine zu hohe Dichte führt zu einer schlechteren SEO."
+
 #: keyword_rules.module:38
 msgid "Test passed."
 msgstr "Test bestanden."
@@ -72,4 +80,3 @@ msgstr "Regeln mit Schlüsselwörtern für den SEO Checker"
 #: keyword_rules.info:0
 msgid "SEO Compliance Checker"
 msgstr "SEO Checker"
-

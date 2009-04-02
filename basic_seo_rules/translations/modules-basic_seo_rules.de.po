@@ -20,12 +20,12 @@ msgstr ""
 "X-Poedit-Language: German\n"
 
 #: basic_seo_rules.module:15
-msgid "Alt attributes in <img> - tags"
-msgstr "Alt-Attribute in <img> - Tags"
+msgid "Alt attributes in &lt;img&gt; - tags"
+msgstr "Alt-Attribute in &lt;img&gt;-Tags"
 
 #: basic_seo_rules.module:16
-msgid "Checks if all the <img> tags in the body have an alt attribute."
-msgstr "Überprüft ob alle <img>-Tags des Bodys ein alt-Attribut enthalten."
+msgid "Checks if all the &lt;img&gt; tags in the body have an alt attribute."
+msgstr "Überprüft ob alle &lt;img&gt;-Tags des Bodys ein alt-Attribut enthalten."
 
 #: basic_seo_rules.module:20;29
 msgid "Test passed."
@@ -36,12 +36,12 @@ msgid "Test failed, please make sure your images contain an alternative text."
 msgstr "Der Test war nicht erfolgreich. Bitte vergewissern Sie sich, dass ihre Bilder Alternativtexte enthalten."
 
 #: basic_seo_rules.module:24
-msgid "Title attributes in <a href> - tags"
-msgstr "Title-Attribute in <a href>-Tags"
+msgid "Title attributes in &lt;a href&gt; - tags"
+msgstr "Title-Attribute in &lt;a href&gt;-Tags"
 
 #: basic_seo_rules.module:25
-msgid "Checks if all the <a href> tags have a title attribute."
-msgstr "Überprüft ob alle <a href>-Tags ein Title-Attribut enthalten"
+msgid "Checks if all the &lt;a href&gt; tags have a title attribute."
+msgstr "Überprüft ob alle &lt;a href&gt;-Tags ein Title-Attribut enthalten."
 
 #: basic_seo_rules.module:30
 msgid "Test failed, please make sure your links contain a title attribute."

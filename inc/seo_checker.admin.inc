@@ -53,9 +53,9 @@ function seo_checker_settings() {
     $form['thresholds']['seo_threshold_'. $rid] = array(
       '#type' => 'slider',
       '#slider_type' => $rule['threshold type'],
-      '#title' => check_plain($rule['name']),
+      '#title' => strip_tags(check_markup($rule['name'])),
       '#default_value' => seo_checker_get_rule_threshold($rule, $rid),
-      '#description' => check_plain($rule['description']),
+      '#description' => strip_tags(check_markup($rule['description'])),
     );
     if ($rule['threshold type'] == 'bool') {
       $form['thresholds']['seo_threshold_'. $rid]['#steps'] = 1;
