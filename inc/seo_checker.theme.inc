@@ -18,7 +18,7 @@
  */
 function seo_checker_elements() {
   $type = array();
-  $type['slider'] = array(
+  $type['seo_slider'] = array(
     '#input' => TRUE,
     '#steps' => 100,
     '#size' => 3,
@@ -35,7 +35,7 @@ function seo_checker_elements() {
 function seo_checker_theme() {
   $path = drupal_get_path('module', 'seo_checker');
   return array(
-    'slider' => array(
+    'seo_slider' => array(
        'template' => 'slider-atleast',
        'path' => "$path/theme",
        'arguments' => array('element' => NULL),
@@ -49,7 +49,7 @@ function seo_checker_theme() {
 /**
  * Implementation of template_preprocess().
  */
-function template_preprocess_slider(&$args) {
+function seo_checker_preprocess_seo_slider(&$args) {
   if (module_exists('jquery_ui')) {
     switch ($args['element']['#slider_type']) {
       case 'at_least':
