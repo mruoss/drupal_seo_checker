@@ -50,7 +50,7 @@ function seo_checker_settings() {
   );
   foreach ($rules as $rid => $rule) {
     $form['thresholds']['seo_threshold_'. $rid] = array(
-      '#type' => 'slider',
+      '#type' => 'seo_slider',
       '#slider_type' => $rule['threshold type'],
       '#title' => check_plain($rule['name']),
       '#default_value' => seo_checker_get_rule_threshold($rule, $rid),
