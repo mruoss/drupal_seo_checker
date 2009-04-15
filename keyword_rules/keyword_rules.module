@@ -46,7 +46,15 @@ function keyword_rules_register_seo_rules() {
  * @param object $form_values
  */
 function keyword_rules_density($form_values) {
-  $keywords = $form_values[variable_get('keyword_rules_keywords_field', 'field_seo_keywords')][0]['value'];
+  switch (variable_get('keyword_rules_keywords_driver', 'cck')) {
+    case 'nodewords':
+      $keywords = $form_values['nodewords']['keywords'];
+      break;
+    default:
+      $keywords = $form_values[variable_get('keyword_rules_keywords_field', 'field_seo_keywords')][0]['value'];
+      break;
+  }
+
   $tags = drupal_explode_tags($keywords);
   if (count($tags) == 0) {
     return 0;
@@ -68,14 +76,45 @@ function keyword_rules_density($form_values) {
  * Defines the settings form.
  */
 function keyword_rules_settings() {
+  drupal_add_js(drupal_get_path('module', 'keyword_rules') .'/js/admin.js');
   $form = array();
   $fields = array();
   $fieldarr = content_fields();
   foreach ($fieldarr as $label => $field) {
     $fields[$label] = $field['field_name'];
   }
-  $form['keyword_rules_keywords_field'] = array(
-    '#type' => 'radios',
+
+  $keyword_field_modules = array('cck' => 'cck');
+  if (module_exists('nodewords')) {
+    $keyword_field_modules['nodewords'] = 'Meta Tags';
+  }
+
+  if (count($keyword_field_modules) > 1) {
+    $form['keyword_rules_keywords_driver'] = array(
+      '#type' => 'radios',
+      '#title' => t('Keyword Field Provider Module'),
+      '#description' => t('Select what module to use to provide a field for keywords.'),
+      '#default_value' => variable_get('keyword_rules_keywords_driver', 'cck'),
+      '#options' => $keyword_field_modules,
+    );
+  } else {
+    $form['keyword_rules_keywords_driver'] = array(
+      '#type' => 'hidden',
+      '#value' => 'cck',
+    );
+  }
+
+  $form['keyword_rules_cck'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('CCK field selection'),
+    '#attributes' => array(
+      'id' => 'cck_settings',
+      'class' => 'keyword_rule_settings_fieldset',
+      'style' => 'display: none;',
+    ),
+  );
+  $form['keyword_rules_cck']['keyword_rules_keywords_field'] = array(
+    '#type' => 'select',
     '#title' => t('Field defining the keywords'),
     '#default_value' => variable_get('keyword_rules_keywords_field', 'field_seo_keywords'),
     '#description' => t('Select the field that defines the keywords to be used for the checks.'),

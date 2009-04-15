@@ -80,3 +80,15 @@ msgstr "Regeln mit Schlüsselwörtern für den SEO Checker"
 #: keyword_rules.info:0
 msgid "SEO Compliance Checker"
 msgstr "SEO Checker"
+
+#: keyword_rules.module
+msgid "Keyword Field Provider Module"
+msgstr "Modul für das Schlüsselwort-Feld"
+
+#: keyword_rules.module
+msgid "Select what module to use to provide a field for keywords."
+msgstr "Wählen Sie das Modul, welches für das Schlüsselwort-Feld zuständig sein soll."
+
+#: keyword_rules.module
+msgid "CCK field selection"
+msgstr "Auswahl des CCK Feldes"
