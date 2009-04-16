@@ -1,5 +1,4 @@
 ; $Id$
 name = 'SEO Compliance Checker'
 description = 'Checks the SEO compliance of a node at it's creation/modification'
-core = "6.x"
 package = "SEO Compliance Checker"
