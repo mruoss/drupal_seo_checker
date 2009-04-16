@@ -1,7 +1,6 @@
 ; $Id$
 name = Keyword Rules
 description = Keyword rule checks for the SEO compliance checker module
-core = 7.x
 dependencies[] = seo_checker
 dependencies[] = cck
 files[] = keyword_rules.module
