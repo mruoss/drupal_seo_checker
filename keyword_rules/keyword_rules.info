@@ -4,3 +4,4 @@ description = 'Keyword rule checks for the SEO compliance checker module'
 dependencies[] = "seo_checker"
 dependencies[] = "text"
 package = "SEO Compliance Checker"
+core = 6.x
