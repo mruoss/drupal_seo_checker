@@ -102,8 +102,14 @@ function seo_checker_perform_checks(&$form, $form_values) {
     else {
       $threshold_text = '&#8712;&nbsp;['. $threshold[0] .'%,'. $threshold[1] .'%]';
     }
-    /* here we apply the rules to the values. It should return an integer result. */
-    $check_result = round($rule['callback']($form_values));
+
+    /* here we apply the rules to the values. It should return an integer result or FALSE if not applicable. */
+    $check_result = $rule['callback']($form_values);
+    if ($check_result === FALSE) {
+      /* skip this rule */
+      continue;
+    }
+    $check_result = round($check_result);
 
     /* check if the submitted node has passed the test. */
     $passed = $check_result >= $threshold[0] && $check_result <= $threshold[1] ? 'passed' : 'failed';
@@ -144,7 +150,13 @@ function seo_checker_perform_checks(&$form, $form_values) {
  * The SEO Checker has to be enabled per content type
  */
 function seo_checker_form_node_type_form_alter(&$form, $form_status) {
-  $form['workflow']['seo_checker'] = array(
+  $form['seo_checker'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('SEO Complicance Checker'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['seo_checker']['seo_checker'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable SEO checking'),
     '#default_value' => variable_get('seo_checker_'. $form['#node_type']->type, 0),
