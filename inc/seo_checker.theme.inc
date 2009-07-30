@@ -78,5 +78,7 @@ function theme_seo_check_results($element) {
   );
   $element['#type'] = 'item';
   $element['#value'] = $output;
+  $element['#prefix'] = '<div class="seo-check-results">';
+  $element['#suffix'] = '</div>';
   return drupal_render($element);
 }

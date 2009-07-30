@@ -39,3 +39,16 @@ function seo_checker_submodule_uninstall($modulename) {
     variable_del('seo_threshold_'. $rid);
   }
 }
+
+/**
+ * Implementation of hook_update_N().
+ */
+function seo_checker_update_6100() {
+  $allow_failures = variable_get('seo_checker_allow_failures', 1);
+  if ($allow_failures == 0) {
+    variable_set('seo_checker_allow_failures', 'no-failures');
+  } elseif ($allow_failures == 1) {
+    variable_set('seo_checker_allow_failures', 'show-preview-only');
+  }
+  return array();
+}

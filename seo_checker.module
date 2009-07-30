@@ -45,19 +45,17 @@ function seo_checker_menu() {
   return $items;
 }
 
+function seo_checker_node_form_validate($form, &$form_state) {
+  seo_checker_perform_checks($node, $form_state['values']);
+}
+
 /**
  * Implementation of hook_form_alter().
  * Add check results to the form if it has been submitted.
  */
 function seo_checker_form_alter(&$form, $form_state, $form_id) {
   if (strpos($form_id, 'node_form') && variable_get('seo_checker_'. $form['type']['#value'], 0) != 0) {
-    /* if this is a node preview, only check upon form rebuild */
-    if (!empty($form_state['post']) && $form_state['post']['op'] != 'Preview') {
-      seo_checker_perform_checks($form, $form_state['post']);
-    }
-    elseif (!empty($form_state['values'])) {
-      seo_checker_perform_checks($form, $form_state['values']);
-    }
+    $form['#validate'][] = 'seo_checker_node_form_validate';
   }
 }
 
@@ -76,7 +74,7 @@ function seo_checker_get_rule_threshold($rule, $rid) {
  * This is the main seo checker function. It checks the submitted node
  * by applying all the rules and includes the summary to the node form.
  */
-function seo_checker_perform_checks(&$form, $form_values) {
+function seo_checker_perform_checks(&$form, &$form_values) {
   /* overall status */
   $checks_passed = TRUE;
 
@@ -123,20 +121,28 @@ function seo_checker_perform_checks(&$form, $form_values) {
     $checks_passed &= ($check_result >= $threshold[0] && $check_result <= $threshold[1]);
   }
 
-  /* render the result table and append it to the form */
-  drupal_add_css(drupal_get_path('module', 'seo_checker') .'/css/seo_checker.css');
-
   /* append the check results just before the title field */
-  $form['check_results'] = array(
+  $seo_check_results = array(
     '#type' => 'seo_check_results',
     '#title' => t('SEO Check Results'),
     '#results' => $results,
-    '#weight' => $form['title']['#weight'] - 1,
   );
-
+  $message = drupal_render($seo_check_results);
+  
   /* throw an error if failures are not allowed */
-  if (!$checks_passed && !variable_get('seo_checker_allow_failures', 1)) {
-    form_set_error('check_results', t('The SEO compliance check was not successful. Check the table and modify your content as required.'));
+  $check_policy = variable_get('seo_checker_allow_failures', 'show-preview-only');
+  switch ($check_policy) {
+    case 'no-failures':
+      if (!$checks_passed) {
+        form_set_error('check_results', t('The SEO compliance check was not successful. Check the table and modify your content as required.'));
+      }
+    case 'show-always':
+      drupal_set_message($message);
+      break;
+    case 'show-preview-only':
+      if ($form_values['op'] == 'Preview') {
+        drupal_set_message($message);
+      }
   }
 }
 
@@ -150,6 +156,14 @@ function seo_checker_form_node_type_form_alter(&$form, $form_status) {
     '#default_value' => variable_get('seo_checker_'. $form['#node_type']->type, 0),
     '#description' => t('Check this box to enable SEO checking for this node type.'),
   );
+}
+
+/**
+ * Implementation of hook_init().
+ */
+function seo_checker_init() {
+  /* render the result table and append it to the form */
+  drupal_add_css(drupal_get_path('module', 'seo_checker') .'/css/seo_checker.css');
 }
 
 
