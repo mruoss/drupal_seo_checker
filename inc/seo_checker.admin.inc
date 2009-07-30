@@ -35,11 +35,17 @@ function seo_checker_settings() {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
+
   $form['general']['seo_checker_allow_failures'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Allow check failures'),
-    '#default_value' => variable_get('seo_checker_allow_failures', 1),
-    '#description' => t('Allow previews to be saved even if not all checks are successful.'),
+    '#type' => 'radios',
+    '#title' => t('Check policy and display settings'),
+    '#default_value' => variable_get('seo_checker_allow_failures', 'show-preview-only'),
+    '#options' => array(
+      'show-preview-only' => t("Allow check failures and only show the check results on node previews."),
+      'show-always' => t("Allow check failures and also show the results when nodes are saved."),
+      'no-failures' => t("Don't allow nodes to be saved as long as they keep failing on some tests."),
+    ),
+    '#description' => t('Please decide if SEO check failures should be allowed and in what cases check results should be displayed.'),
   );
 
   $form['thresholds'] = array(

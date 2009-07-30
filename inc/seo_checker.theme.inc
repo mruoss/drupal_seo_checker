@@ -69,12 +69,15 @@ function seo_checker_preprocess_seo_slider(&$args) {
  * value contains the check results, rendered as a table.
  */
 function theme_seo_check_results($element) {
-  $output = '<b>'.t('SEO Check Results').':</b>';
+  
+  $output = '<div class="seo-check-results">';
+  $output .= '<b>'.t('SEO Check Results').':</b>';
   $output .= theme(
     'table',
     array(t('Rule'), t('Message'), t('Achieved'), t('Required'), t('Passed')),
     $element['#results'],
     array()
   );
+  $output .= '</div>';
   return $output;
 }
