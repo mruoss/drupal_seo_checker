@@ -40,17 +40,42 @@ function basic_seo_rules_register_seo_rules() {
  * @param array $form_values
  */
 function basic_seo_rules_alt_attribute($form_values) {
-  if (!preg_match_all('/<img[^>]+>/i', $form_values['body'], $matches)) {
+  /* Fetch image CCK fields for this node type */
+  $fields = content_fields(NULL, $form_values['type']); 
+  $image_fields = array();
+  foreach ($fields as $field) {
+    if ($field['type'] == 'filefield' && $field['widget']['module'] == 'imagefield' && $field['widget']['custom_alt'] == TRUE) {
+      $image_fields[] = $field;
+    }
+  }
+
+  if (count($image_fields) == 0 && !preg_match_all('/<img[^>]+>/i', $form_values['body'], $matches)) {
     return 100;
   }
+  
   $total = 0;
   $successful = 0;
-  foreach ($matches[0] as $image_tag) {
-    if (preg_match('/alt=(\S{3,})/i', $image_tag)) {
-      $successful++;
+
+  /* check content */
+  if (!empty($matches)) {
+    foreach ($matches[0] as $image_tag) {
+      if (preg_match('/alt=(\S{3,})/i', $image_tag)) {
+        $successful++;
+      }
+      $total++;
     }
-    $total++;
   }
+
+  /* check image CCK fields */
+  foreach ($image_fields as $field) {
+    foreach ($form_values[$field['field_name']] as $image) {
+      $total++;
+      if (!empty($image['data']['alt'])) {
+        $successful++;
+      }
+    }
+  }
+  
   return 100*$successful/$total;
 }
 
