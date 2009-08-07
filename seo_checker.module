@@ -176,15 +176,20 @@ function seo_checker_init() {
  * @param string $needle
  */
 function seo_checker_wordipos($haystack, $needle, $offset=0) {
-  $pos = stripos($haystack, $needle, $offset);
-  if ($pos === FALSE) {
-    return FALSE;
-  }
+  $pos = -1;
+  $found = FALSE;
+  while ($found === FALSE) {
+    $pos = stripos($haystack, $needle, $offset);
+    if ($pos === FALSE) {
+      return FALSE;
+    }
 
-  /* check if the characters before and after the found tag are non-word characters */
-  $expanded_string = (isset($haystack[$pos-1]) ? $haystack[$pos-1] :' ') . (isset($haystack[$pos+strlen($needle)]) ? $haystack[$pos+strlen($needle)] : ' ');
-  if (preg_match_all('/[\W_]/', $expanded_string, $null) == 2) {
-    return $pos;
+    /* check if the characters before and after the found tag are non-word characters */
+    $expanded_string = (isset($haystack[$pos-1]) ? $haystack[$pos-1] :' ') . (isset($haystack[$pos+strlen($needle)]) ? $haystack[$pos+strlen($needle)] : ' ');
+    if (preg_match_all('/[\W_]/', $expanded_string, $null) == 2) {
+      $found = TRUE;
+    }
+    $offset = $pos+1;
   }
-  return FALSE;
+  return $pos;
 }
