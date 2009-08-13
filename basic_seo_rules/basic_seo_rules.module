@@ -48,7 +48,7 @@ function basic_seo_rules_alt_attribute($form_values) {
   $image_fields = array();
   /* iterate through all the fields */
   foreach ($fields as $field) {
-    if ($field['type'] == 'filefield' && $field['widget']['module'] == 'imagefield' && $field['widget']['custom_alt'] == TRUE) {
+    if ($field['type'] == 'filefield' && $field['widget']['module'] == 'imagefield' && $field['widget']['custom_alt'] == TRUE && is_array($form_values[$field['field_name']])) {
       /* iterate through all the submitted image fields */
       foreach ($form_values[$field['field_name']] as $image) {
         /* only check if an image was submitted */
@@ -59,6 +59,14 @@ function basic_seo_rules_alt_attribute($form_values) {
           }
         }
       }
+    }
+  }
+
+  /* Check for image_attattach images */
+  if (variable_get('image_attach_'. $form_values['type'], FALSE)) {
+    $total++;
+    if (!empty($form_values['image_title'])) {
+      $successful++;
     }
   }
 
