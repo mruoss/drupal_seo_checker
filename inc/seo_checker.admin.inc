@@ -45,7 +45,7 @@ function seo_checker_settings() {
       'show-always' => t("Allow check failures and also show the results when nodes are saved."),
       'no-failures' => t("Don't allow nodes to be saved as long as they keep failing on some tests."),
     ),
-    '#description' => t('Please decide if SEO check failures should be allowed and in what cases  check results should be displayed.'),
+    '#description' => t('Please decide if SEO check failures should be allowed and in what cases check results should be displayed.'),
   );
 
   $form['thresholds'] = array(

@@ -49,7 +49,7 @@ function keyword_rules_register_seo_rules() {
   );
   $rules['keyword_in_headings'] = array(
     'name' => t('Usage of keywords in headings'),
-    'description' => t('Calculates the percentage of the heading-tags (e.g. &lt;h1&gt;,&lt;h2&gt;,...) in the node body contain keywords.'),
+    'description' => t('Calculates the percentage of the heading-tags (e.g. &lt;h1&gt;,&lt;h2&gt;,...) in the node body that contain keywords.'),
     'threshold type' => 'at_least',
     'default threshold' => 50,
     'callback' => 'keyword_rules_headings',
