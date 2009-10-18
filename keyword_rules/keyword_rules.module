@@ -89,7 +89,7 @@ function keyword_rules_density($form_values) {
  */
 function keyword_rules_title($form_values) {
   $tags = _keyword_rules_extract_tags($form_values);
-  $title = $form_values['title'];
+  $title = strtolower($form_values['title']);
   $best_score = 1000; /* sentinel */
   $best_tag = null;
   foreach ($tags as $tag) {
@@ -103,16 +103,17 @@ function keyword_rules_title($form_values) {
   if (is_null($best_tag)) {
     return 0;
   }
-  
+
   /* calculate percentage score */
   list($before, $after) = explode($best_tag, $title, 2);
   preg_match_all  ('/\W+/', $before, $matches);
-  $words_before = count($matches);
+  $words_before = count($matches[0]);
   if ($words_before == 0) {
     return 100;
   } else {
     preg_match_all  ('/\W+/', $after, $matches);
-    $words_after = count($matches);
+    /* count the keyword itself as one oft he "words_after" */
+    $words_after = count($matches[0])+1;
     return 100*$words_after/($words_before+$words_after);
   }
 }
@@ -158,7 +159,7 @@ function _keyword_rules_extract_tags($form_values) {
       $keywords = $form_values[variable_get('keyword_rules_keywords_field', 'field_seo_keywords')][0]['value'];
       break;
   }
-  return drupal_explode_tags($keywords);
+  return drupal_explode_tags(strtolower($keywords));
 }
 
 /**
