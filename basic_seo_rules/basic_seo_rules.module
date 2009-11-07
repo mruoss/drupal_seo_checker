@@ -44,7 +44,8 @@ function basic_seo_rules_alt_attribute($form_values) {
   $successful = 0;
 
   /* Fetch image CCK fields for this node type */
-  $fields = content_fields(NULL, $form_values['type']);
+  $content_info = content_types($form_values['type']);
+  $fields = $content_info['fields'];
   $image_fields = array();
   /* iterate through all the fields */
   foreach ($fields as $field) {
