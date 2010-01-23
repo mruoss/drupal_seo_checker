@@ -153,7 +153,7 @@ function keyword_rules_headings($form_values) {
 function _keyword_rules_extract_tags($form_values) {
   switch (variable_get('keyword_rules_keywords_driver', 'cck')) {
     case 'nodewords':
-      $keywords = $form_values['nodewords']['keywords'];
+      $keywords = $form_values['nodewords']['keywords']['value'];
       break;
     default:
       $keywords = $form_values[variable_get('keyword_rules_keywords_field', 'field_seo_keywords')][0]['value'];
@@ -202,7 +202,9 @@ function keyword_rules_settings() {
       'class' => 'keyword_rule_settings_fieldset',
     ),
   );
-
+  if (variable_get('keyword_rules_keywords_driver', 'cck') != 'cck') {
+    $form['keyword_rules_cck']['#attributes']['style'] = 'display:none;';
+  }
   $form['keyword_rules_cck']['keyword_rules_keywords_field'] = array(
     '#type' => 'select',
     '#title' => t('Field defining the keywords'),
@@ -210,5 +212,6 @@ function keyword_rules_settings() {
     '#description' => t('Select the field that defines the keywords to be used for the checks.'),
     '#options' => $fields,
   );
+
   return system_settings_form($form);
 }
