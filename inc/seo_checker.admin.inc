@@ -81,4 +81,5 @@ function _seo_checker_load_slider() {
     drupal_add_js(drupal_get_path('module', 'seo_checker') ."/js/slider.js");
   }
   drupal_add_css(drupal_get_path('module', 'seo_checker') ."/css/slider.css");
+  drupal_add_css(drupal_get_path('module', 'jquery_ui') ."/jquery.ui/themes/base/ui.all.css");
 }

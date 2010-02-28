@@ -10,7 +10,6 @@
  * Implementation of hook_install().
  */
 function seo_checker_install() {
-  variable_set('jquery_update_compression_type', 'none');
 }
 
 /**

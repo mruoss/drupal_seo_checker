@@ -1,8 +1,17 @@
 
 ---------------------------------------------------------------------------
-seo_checker - Version 1.0
+seo_checker - Version 6.2
 ---------------------------------------------------------------------------
-Author: Michael Ruoss (mruoss at optaros dot co m)
+Author: Michael Ruoss
+
+About Version 6.2
+=================
+
+This version requires jquery_ui and jquery_update and brings support for the
+newer versions of jquery and jquery_ui for the threshold administration.
+
+This module currentyl requires jquery_update 6.x-dev because it is the only
+one that comes with JQuery v1.3.
 
 Overview:
 =========

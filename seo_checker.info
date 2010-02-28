@@ -2,4 +2,6 @@
 name = 'SEO Compliance Checker'
 description = 'Checks the SEO compliance of a node at it's creation/modification'
 package = "SEO Compliance Checker"
+dependencies[] = "jquery_update"
+dependencies[] = "jquery_ui"
 core = 6.x

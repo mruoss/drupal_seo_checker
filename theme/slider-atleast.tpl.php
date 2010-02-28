@@ -13,24 +13,21 @@
 <div>
   <strong><?php echo $element["#title"];?>:</strong>
 </div>
-<div style="float:left">
-  <div id='<?php echo $element["#id"]; ?>_slider' class='ui-slider-1'></div>
+<div id="<?php echo $element["#id"]; ?>" class="slider-widget-container">
+  <div style="float:left">
+    <div id='<?php echo $element["#id"]; ?>_slider' class='ui-slider-1'></div>
+  </div>
+  <span style="margin-left: 15px;"><span id='<?php echo $element["#id"]; ?>_nr_0'><?php echo $element["#default_value"][0]; ?>%</span></span>
 </div>
-<span style="margin-left: 5px;"><span id='<?php echo $element["#id"]; ?>_nr'><?php echo $element["#default_value"][0]; ?>%</span></span>
 <div style="clear:both;"></div>
 <script type="text/javascript">
 <!--
   $('#<?php echo $element["#id"];?>_slider').slider({
     slide: changeHandle,
-    steps: <?php echo $element["#steps"]; ?>,
-    handles: [
-      {
-        start: <?php echo $element["#default_value"][0]; ?>,
-        id: '<?php echo $element["#id"];?>_handle'
-      }
-    ]
+    step: 100/<?php echo $element["#steps"]; ?>,
+    value: <?php echo $element["#default_value"][0]; ?>
   });
 //-->
 </script>
 <div class="description" style="margin-bottom:10px;"><?php echo $element["#description"];?></div>
-<input type="hidden" name='<?php echo $element["#name"]; ?>' id='<?php echo $element["#id"];?>_value' value='<?php echo $element["#default_value"][0]; ?>' />
+<input type="hidden" name='<?php echo $element["#name"]; ?>' id='<?php echo $element["#id"];?>_value_0' value='<?php echo $element["#default_value"][0]; ?>' />
