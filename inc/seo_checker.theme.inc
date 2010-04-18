@@ -16,12 +16,19 @@
 /**
  * Defines the slider form element and its default values
  */
-function seo_checker_elements() {
-  $type['seo_slider'] = array(
+function seo_checker_element_info() {
+  $jquery = module_exists('jquery_ui');
+  $type['seo_slider_at_least'] = array(
     '#input' => TRUE,
     '#steps' => 100,
     '#size' => 3,
-    '#theme' => 'seo_slider',
+    '#theme' => ($jquery ? 'seo_slider_at_least' : 'seo_slider_nojquery'),
+  );
+  $type['seo_slider_range'] = array(
+    '#input' => TRUE,
+    '#steps' => 100,
+    '#size' => 3,
+    '#theme' => ($jquery ? 'seo_slider_range' : 'seo_slider_nojquery'),
   );
   $type['seo_check_results'] = array(
     '#results' => array(),
@@ -35,33 +42,25 @@ function seo_checker_elements() {
  */
 function seo_checker_theme($existing, $type, $theme, $path) {
   return array(
-    'seo_slider' => array(
+    'seo_slider_at_least' => array(
+       'render element' => 'element',
        'template' => 'slider-atleast',
        'path' => "$path/theme",
-       'arguments' => array('element' => NULL),
+    ),
+    'seo_slider_range' => array(
+       'render element' => 'element',
+       'template' => 'slider-range',
+       'path' => "$path/theme",
+    ),
+    'seo_slider_nojquery' => array(
+       'render element' => 'element',
+       'template' => 'slider-nojquery',
+       'path' => "$path/theme",
     ),
     'seo_check_results' => array(
-      'arguments' => array('element' => NULL),
+      'render element' => 'element',
     )
   );
-}
-
-/**
- * Implementation of template_preprocess().
- */
-function seo_checker_preprocess_seo_slider(&$args) {
-  if (module_exists('jquery_ui')) {
-    switch ($args['element']['#slider_type']) {
-      case 'at_least':
-        $args['template_files'][] = 'slider-atleast';
-        break;
-      case 'range':
-        $args['template_files'][] = 'slider-range';
-        break;
-    }
-  } else {
-    $args['template_files'][] = 'slider-nojquery';
-  }
 }
 
 /**
@@ -69,14 +68,15 @@ function seo_checker_preprocess_seo_slider(&$args) {
  * value contains the check results, rendered as a table.
  */
 function theme_seo_check_results($element) {
-  
   $output = '<div class="seo-check-results">';
   $output .= '<b>'.t('SEO Check Results').':</b>';
   $output .= theme(
     'table',
-    array(t('Rule'), t('Message'), t('Achieved'), t('Required'), t('Passed')),
-    $element['#results'],
-    array()
+    array(
+      'header' => array(t('Rule'), t('Message'),t('Achieved'),t('Required'),t('Passed')),
+      'rows' => $element['#results'],
+      'attributes' => array('class' => array('asdf')),
+    )
   );
   $output .= '</div>';
   return $output;

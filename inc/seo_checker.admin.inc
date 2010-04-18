@@ -37,7 +37,7 @@ function seo_checker_settings() {
   );
 
   $form['general']['seo_checker_allow_failures'] = array(
-    '#type' => 'radios',
+   '#type' => 'radios',
     '#title' => t('Check policy and display settings'),
     '#default_value' => variable_get('seo_checker_allow_failures', 'show-preview-only'),
     '#options' => array(
@@ -56,10 +56,9 @@ function seo_checker_settings() {
   );
   foreach ($rules as $rid => $rule) {
     $form['thresholds']['seo_threshold_'. $rid] = array(
-      '#type' => 'seo_slider',
-      '#slider_type' => $rule['threshold type'],
+      '#type' => 'seo_slider_'.$rule['threshold type'],
       '#title' => check_plain($rule['name']),
-      '#default_value' => seo_checker_get_rule_threshold($rule, $rid),
+      '#default' => seo_checker_get_rule_threshold($rule, $rid),
       '#description' => check_plain($rule['description']),
     );
     if ($rule['threshold type'] == 'bool') {
@@ -76,7 +75,7 @@ function seo_checker_settings() {
  */
 function _seo_checker_load_slider() {
   if (module_exists('jquery_ui')) {
-    jquery_ui_add('ui.slider', 'none');
+    drupal_add_library('system', 'ui.slider');
     drupal_add_js(drupal_get_path('module', 'seo_checker') ."/js/slider.js");
   }
   drupal_add_css(drupal_get_path('module', 'seo_checker') ."/css/slider.css");

@@ -25,7 +25,7 @@ require_once('./'. drupal_get_path('module', 'seo_checker') .'/inc/seo_checker.t
  * @return array
  */
 function seo_checker_menu() {
-  $items['admin/settings/seo_checker'] = array(
+  $items['admin/config/content/seo_checker'] = array(
     'title' => t('SEO Checker'),
     'description' => t('Manage SEO Checker'),
     'page callback' => 'drupal_get_form',
@@ -33,7 +33,7 @@ function seo_checker_menu() {
     'access arguments' => array('administer seo_checker configuration'),
     'type' => MENU_NORMAL_ITEM,
   );
-  $items['admin/settings/seo_checker/thresholds'] = array(
+  $items['admin/config/content/seo_checker/thresholds'] = array(
     'title' => t('SEO Rule Thresholds'),
     'description' => t('Set the tresholds for the different SEO rules.'),
     'page callback' => 'drupal_get_form',
@@ -122,7 +122,7 @@ function seo_checker_perform_checks(&$form, $form_values) {
     /* append the results to the array and update the overall status variable */
     $results[] = array(
       'data' => $data,
-      'class' => 'seo_checker_result_'. $passed,
+      'class' => array('seo_checker_result_'. $passed),
     );
     $checks_passed &= ($check_result >= $threshold[0] && $check_result <= $threshold[1]);
   }
@@ -133,10 +133,12 @@ function seo_checker_perform_checks(&$form, $form_values) {
     '#title' => t('SEO Check Results'),
     '#results' => $results,
   );
-  $message = drupal_render($seo_check_results);
   
+  $message = drupal_render($seo_check_results);
+
   /* throw an error if failures are not allowed */
   $check_policy = variable_get('seo_checker_allow_failures', 'show-preview-only');
+  watchdog('seo_debug',$check_policy);
   switch ($check_policy) {
     case 'no-failures':
       if (!$checks_passed) {
@@ -156,12 +158,16 @@ function seo_checker_perform_checks(&$form, $form_values) {
  * The SEO Checker has to be enabled per content type
  */
 function seo_checker_form_node_type_form_alter(&$form, $form_status) {
-  $form['seo_checker'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('SEO Complicance Checker'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-  );
+  if (!isset($form['seo_checker'])) {
+    $form['seo_checker'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('SEO Complicance Checker'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#weight' => 1,
+      "#group"=> "additional_settings",
+    );
+  }
   $form['seo_checker']['seo_checker'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable SEO checking'),

@@ -21,6 +21,24 @@ function keyword_rules_register_seo_rules() {
     'passed feedback' => t('Test passed.'),
     'failed feedback' => t('Test failed, please make sure you use your keywords in the body but not too often.'),
   );
+  $rules['keyword_in_title'] = array(
+    'name' => t('Usage of keywords in node titles'),
+    'description' => t('Checks if at least one of the keywords is used in the node title. If a keyword is used in the title, the result of this test indicates how early in the title the keyword appears. A threshold of 100% means that a keyword must be the first word in a node title while a threshold of 50% requires keywords to be in the first half of the node title.'),
+    'threshold type' => 'at_least',
+    'default threshold' => 50,
+    'callback' => 'keyword_rules_title',
+    'passed feedback' => t('Test passed.'),
+    'failed feedback' => t('Test failed, place your keywords early in your node title.'),
+  );
+  $rules['keyword_in_headings'] = array(
+    'name' => t('Usage of keywords in headings'),
+    'description' => t('Calculates the percentage of the heading-tags (e.g. &lt;h1&gt;,&lt;h2&gt;,...) in the node body that contain keywords.'),
+    'threshold type' => 'at_least',
+    'default threshold' => 50,
+    'callback' => 'keyword_rules_headings',
+    'passed feedback' => t('Test passed.'),
+    'failed feedback' => t('Test failed, use keywords in your heading-tags (e.g. &lt;h1&gt;,&lt;h2&gt;,... - Tags with lower numbers weigh more.)'),
+  );
   return $rules;
 }
 
@@ -29,16 +47,11 @@ function keyword_rules_register_seo_rules() {
  * @param object $form_values
  */
 function keyword_rules_density($form_values) {
-  $keyword_rules_field = variable_get('keyword_rules_field_'. $form_values['type'], 0);
-  if ($keyword_rules_field === 'disabled') {
-    return FALSE;
-  }
-  $keywords = $form_values[$keyword_rules_field][0]['value'];
-  $tags = drupal_explode_tags($keywords);
+  $tags = _keyword_rules_extract_tags($form_values);
   if (count($tags) == 0) {
     return 0;
   }
-  $body = strip_tags($form_values['body']);
+  $body = strip_tags($form_values['body']['und'][0]['value']);
   $words = preg_split('/\W+/', $body);
   $total = count($words);
   $nr_of_tags = 0;
@@ -52,16 +65,109 @@ function keyword_rules_density($form_values) {
 }
 
 /**
+ * Checks if keywords are used in the node title. If they are used, the
+ * resulting score depends on how early the keywords occur in the title. 
+ * If a keyword is used as the first word in the title, the score will be 100%.
+ * @param object $form_values
+ */
+function keyword_rules_title($form_values) {
+  $tags = _keyword_rules_extract_tags($form_values);
+  $title = strtolower($form_values['title']);
+  $best_score = 1000; /* sentinel */
+  $best_tag = null;
+  foreach ($tags as $tag) {
+    if (($score = seo_checker_wordipos($title, $tag)) !== FALSE && $score < $best_score) {
+      $best_score = $score;
+      $best_tag = $tag;
+    }
+  }
+
+  /* no tags or tags not in title */
+  if (is_null($best_tag)) {
+    return 0;
+  }
+
+  /* calculate percentage score */
+  list($before, $after) = explode($best_tag, $title, 2);
+  preg_match_all  ('/\W+/', $before, $matches);
+  $words_before = count($matches[0]);
+  if ($words_before == 0) {
+    return 100;
+  } else {
+    preg_match_all  ('/\W+/', $after, $matches);
+    /* count the keyword itself as one oft he "words_after" */
+    $words_after = count($matches[0])+1;
+    return 100*$words_after/($words_before+$words_after);
+  }
+}
+
+function keyword_rules_headings($form_values) {
+  $tags = _keyword_rules_extract_tags($form_values);
+  $body = $form_values['body']['und'][0]['value'];
+  if (!($nr_matches = preg_match_all('/<h(\d)>(.*?)<\/h\d>/i', $body, $matches, PREG_SET_ORDER))) {
+    return 100;
+  }
+
+  $good_weight = 0;
+  $bad_weight = 0;
+  foreach ($matches as $match) {
+    $weight = $match[1];
+    $heading = $match[2];
+    $found = 0;
+    foreach ($tags as $tag) {
+      $found += intval(seo_checker_wordipos($heading, $tag) !== FALSE);
+    }
+    if ($found > 0) {
+      $good_weight += $found/$weight;
+    } else {
+      $bad_weight += 1/$weight;
+    }
+  }
+  return 100*($good_weight / ($good_weight+$bad_weight));
+}
+
+/**
+ * Helper function to extract keywords from the submitted form values.
+ * @return
+ *   An array of keyword tags.
+ * @param object $form_values
+ *   The array of form values.
+ */
+function _keyword_rules_extract_tags($form_values) {
+  switch (variable_get('keyword_rules_keywords_driver', 'cck')) {
+    case 'nodewords':
+      $keywords = $form_values['nodewords']['keywords'];
+      break;
+    default:
+      $keywords = $form_values[variable_get('keyword_rules_field_'. $form_values['type'], 'field_seo_keywords')]['und'][0]['value'];
+      break;
+  }
+  return drupal_explode_tags(strtolower($keywords));
+}
+
+/**
  * The SEO Checker has to be enabled per content type
  */
 function keyword_rules_form_node_type_form_alter(&$form, $form_status) {
-  $fieldarr = field_info_instances($form['#node_type']->type);
+  $fieldarr = field_info_instances('node', $form['orig_type']['#value']);
   $fields['disabled'] = t('Disable Keyword Check');
 
-  foreach ($fieldarr as $label => $field) {
-    $fields[$label] = $field['field_name'];
+  if (is_array($fieldarr)) {
+    foreach ($fieldarr as $label => $field) {
+      $fields[$label] = $field['field_name'];
+    }
   }
 
+  if (!isset($form['seo_checker'])) {
+    $form['seo_checker'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('SEO Complicance Checker'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#weight' => 1,
+      "#group"=> "additional_settings",
+    );
+  }
   $form['seo_checker']['keyword_rules_field'] = array(
     '#type' => 'select',
     '#title' => t('Field defining the keywords'),
