@@ -136,21 +136,21 @@ function seo_checker_perform_checks(&$form, $form_values) {
   
   $message = drupal_render($seo_check_results);
 
-  /* throw an error if failures are not allowed */
-  $check_policy = variable_get('seo_checker_allow_failures', 'show-preview-only');
-  watchdog('seo_debug',$check_policy);
-  switch ($check_policy) {
-    case 'no-failures':
-      if (!$checks_passed) {
-        form_set_error('check_results', t('The SEO compliance check was not successful. Check the table and modify your content as required.'));
-      }
-    case 'show-always':
-      drupal_set_message($message);
-      break;
-    case 'show-preview-only':
-      if ($form_values['op'] == 'Preview') {
+  if (!$checks_passed && (!user_access('allow seo check failures', $user) || ($user->uid == 1 && variable_get('seo_checker_admin_allow_failurs', 0) == 0))) {
+    form_set_error('check_results', t('The SEO compliance check was not successful. Check the table and modify your content as required.'));
+    drupal_set_message($message);
+  } else {
+    /* throw an error if failures are not allowed */
+    $check_policy = variable_get('seo_checker_allow_failures', 'show-preview-only');
+    switch ($check_policy) {
+      case 'show-always':
         drupal_set_message($message);
-      }
+        break;
+      case 'show-preview-only':
+        if ($form_values['op'] == 'Preview') {
+          drupal_set_message($message);
+        }
+    }
   }
 }
 

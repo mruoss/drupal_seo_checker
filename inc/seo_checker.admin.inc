@@ -13,7 +13,11 @@
  * @return (array) permissions
  */
 function seo_checker_perm() {
-    return array('administer seo_checker configuration');
+    return array(
+      'administer seo_checker configuration',
+      'skip seo checks',
+      'allow seo check failures'
+    );
 }
 
 
@@ -37,15 +41,25 @@ function seo_checker_settings() {
   );
 
   $form['general']['seo_checker_allow_failures'] = array(
-   '#type' => 'radios',
-    '#title' => t('Check policy and display settings'),
+    '#type' => 'radios',
+    '#title' => t('Check result display settings'),
     '#default_value' => variable_get('seo_checker_allow_failures', 'show-preview-only'),
     '#options' => array(
-      'show-preview-only' => t("Allow check failures and only show the check results on node previews."),
-      'show-always' => t("Allow check failures and also show the results when nodes are saved."),
-      'no-failures' => t("Don't allow nodes to be saved as long as they keep failing on some tests."),
+      'show-preview-only' => t("Only show the check results on node previews."),
+      'show-always' => t("Show the results on node previews AND when nodes are saved."),
     ),
-    '#description' => t('Please decide if SEO check failures should be allowed and in what cases check results should be displayed.'),
+  );
+
+  $form['general']['seo_checker_admin_skip_checks'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Should the admin user skip SEO checks?'),
+    '#default_value' => variable_get('seo_checker_admin_skip_checks', 0),
+  );
+
+  $form['general']['seo_checker_admin_allow_failurs'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Should the admin user be allowed to fail SEO checks?'),
+    '#default_value' => variable_get('seo_checker_admin_allow_failurs', 0),
   );
 
   $form['thresholds'] = array(
