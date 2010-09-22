@@ -153,7 +153,17 @@ function keyword_rules_headings($form_values) {
 function _keyword_rules_extract_tags($form_values) {
   switch (variable_get('keyword_rules_keywords_driver', 'cck')) {
     case 'nodewords':
-      $keywords = $form_values['nodewords']['keywords']['value'];
+      if (function_exists('_nodewords_tag_value')) {
+        # Using nodewords >= 6.x-1.12, let nodewords module do its magic...
+        $keywords = _nodewords_tag_value(
+          'keywords',
+          isset($form_values['nodewords']['metatags']) ? $form_values['nodewords']['metatags']['keywords'] : array(),
+          array('type' => NODEWORDS_TYPE_NODE, 'id' => $form_values['nid'])
+        );
+        $keywords = $keywords['value'];
+      } else {
+        $keywords = $form_values['nodewords']['keywords']['value'];
+      }
       break;
     default:
       $keywords = $form_values[variable_get('keyword_rules_keywords_field', 'field_seo_keywords')][0]['value'];
