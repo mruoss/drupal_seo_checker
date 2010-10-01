@@ -80,7 +80,7 @@ msgid "Thresholds for the SEO rules."
 msgstr "Grenzwerte für SEO Regeln."
 
 #: inc/seo_checker.admin.inc:49
-msgid "For the following rules, set the threshold in % where the test should be considered as passed. Depending on the type of the rule, you can either chose 0 or 100 sometimes a value in between. <b>A threshold of 0% disables a test.</b> Results of disabled tests will not be displayed."
+msgid "For the following rules, set the threshold in % where the test should be considered as passed. Depending on the type of the rule, you can either choose 0 or 100 sometimes a value in between. <b>A threshold of 0% disables a test.</b> Results of disabled tests will not be displayed."
 msgstr "Setzen Sie für die folgenden Regeln die Grenzwerte, welche für das Bestehen des jeweiligen Tests notwendig sind, in Prozent. Abhänging vom Typ der Regel können Sie nur einige oder alle Werte zwischen 0 und 100 auswählen. Manchmal kann auch ein Bereich gewählt werden, in welchem der Test als erfolgreich gilt. Ein Grenzwert von 0% deaktiviert einen Test."
 
 #: inc/seo_checker.theme.inc:75

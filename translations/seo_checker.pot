@@ -94,7 +94,7 @@ msgid "Thresholds for the SEO rules."
 msgstr ""
 
 #: inc/seo_checker.admin.inc:55
-msgid "For the following rules, set the threshold in % where the test should be considered as passed. Depending on the type of the rule, you can either chose 0 or 100 sometimes a value in between. <b>A threshold of 0% disables a test.</b> Results of disabled tests will not be displayed."
+msgid "For the following rules, set the threshold in % where the test should be considered as passed. Depending on the type of the rule, you can either choose 0 or 100 sometimes a value in between. <b>A threshold of 0% disables a test.</b> Results of disabled tests will not be displayed."
 msgstr ""
 
 #: inc/seo_checker.theme.inc:75
