@@ -15,7 +15,10 @@ define('SEO_KEYWORD_FIELD_NAME', 'field_seo_keywords');
  */
 function keyword_rules_install() {
   /* create cck fields and assign them to page and story. */
-  $types = array_keys(node_get_types());
+//  content_clear_type_cache(TRUE);
+//  $test = _content_type_info();
+//  $types = array_keys(node_get_types());
+//  var_dump($types);die;
   $field_created = FALSE;
   $field = array(
     'field_name' => SEO_KEYWORD_FIELD_NAME,

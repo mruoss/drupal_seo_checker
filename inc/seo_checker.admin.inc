@@ -52,7 +52,7 @@ function seo_checker_settings() {
     '#type' => 'fieldset',
     '#title' => t('Thresholds for the SEO rules.'),
     '#collapsible' => TRUE,
-    '#description' => t('For the following rules, set the threshold in % where the test should be considered as passed. Depending on the type of the rule, you can either chose 0 or 100 sometimes a value in between. <b>A threshold of 0% disables a test.</b> Results of disabled tests will not be displayed.'),
+    '#description' => t('For the following rules, set the threshold in % where the test should be considered as passed. Depending on the type of the rule, you can either choose 0 or 100 sometimes a value in between. <b>A threshold of 0% disables a test.</b> Results of disabled tests will not be displayed.'),
   );
 
   foreach ($rules as $rid => $rule) {
@@ -66,6 +66,21 @@ function seo_checker_settings() {
     if ($rule['threshold type'] == 'bool') {
       $form['thresholds']['seo_threshold_'. $rid]['#steps'] = 1;
     }
+  }
+
+  /* content types */
+  $form['content_types'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('SEO Checker per Content Type'),
+    '#collapsible' => TRUE,
+    '#description' => t('Enable the SEO Checker for at least one content type. Otherwise you will not see any effect.'),
+  );
+  foreach (node_get_types('names') as $type => $name) {
+    $form['content_types']['seo_checker_'.$type] = array(
+      '#type' => 'checkbox',
+      '#title' => t($name),
+      '#default_value' => variable_get('seo_checker_'. $type, 0),
+    );
   }
 
   return system_settings_form($form);
