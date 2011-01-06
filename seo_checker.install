@@ -16,7 +16,7 @@ function seo_checker_requirements($phase) {
 
   if ($phase == 'runtime') {
     $ok = false;
-    foreach (node_get_types('names') as $type => $name) {
+    foreach (_node_types_build()->types as $type => $name) {
       $ok |= variable_get('seo_checker_'. $type, 0);
     }
     if (!$ok) {

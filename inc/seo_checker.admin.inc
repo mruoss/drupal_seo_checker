@@ -87,7 +87,7 @@ function seo_checker_settings() {
     '#collapsible' => TRUE,
     '#description' => t('Enable the SEO Checker for at least one content type. Otherwise you will not see any effect.'),
   );
-  foreach (node_get_types() as $type) {
+  foreach (_node_types_build()->types as $type) {
     $form['content_types']['seo_checker_'.$type->type] = array(
       '#type' => 'checkbox',
       '#title' => t($type->name),
