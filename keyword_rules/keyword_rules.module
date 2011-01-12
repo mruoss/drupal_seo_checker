@@ -157,7 +157,7 @@ function _keyword_rules_extract_tags($form_values) {
             }
             break;
         default:
-            $keywords = $form_values[$keyword_field][$form_values['language']]['value'];
+            $keywords = $form_values[$keyword_field][$form_values['language']][0]['value'];
             $tags = drupal_explode_tags(strtolower($keywords));
     }
   }

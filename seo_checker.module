@@ -75,6 +75,8 @@ function seo_checker_get_rule_threshold($rule, $rid) {
  * by applying all the rules and includes the summary to the node form.
  */
 function seo_checker_perform_checks(&$form, $form_values) {
+  global $user;
+
   /* overall status */
   $checks_passed = TRUE;
 
@@ -133,7 +135,7 @@ function seo_checker_perform_checks(&$form, $form_values) {
     '#title' => t('SEO Check Results'),
     '#results' => $results,
   );
-  
+
   $message = drupal_render($seo_check_results);
 
   if (!$checks_passed && (!user_access('allow seo check failures', $user) || ($user->uid == 1 && variable_get('seo_checker_admin_allow_failurs', 0) == 0))) {
