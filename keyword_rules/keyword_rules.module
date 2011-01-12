@@ -48,7 +48,10 @@ function keyword_rules_register_seo_rules() {
  */
 function keyword_rules_density($form_values) {
   $tags = _keyword_rules_extract_tags($form_values);
-  if (count($tags) == 0) {
+  if ($tags === FALSE) {
+      return FALSE;
+  }
+  if (count($tags) === 0) {
     return 0;
   }
   $body = strip_tags($form_values['body']['und'][0]['value']);
@@ -66,12 +69,15 @@ function keyword_rules_density($form_values) {
 
 /**
  * Checks if keywords are used in the node title. If they are used, the
- * resulting score depends on how early the keywords occur in the title. 
+ * resulting score depends on how early the keywords occur in the title.
  * If a keyword is used as the first word in the title, the score will be 100%.
  * @param object $form_values
  */
 function keyword_rules_title($form_values) {
   $tags = _keyword_rules_extract_tags($form_values);
+  if ($tags === FALSE) {
+      return FALSE;
+  }
   $title = strtolower($form_values['title']);
   $best_score = 1000; /* sentinel */
   $best_tag = null;
@@ -103,6 +109,9 @@ function keyword_rules_title($form_values) {
 
 function keyword_rules_headings($form_values) {
   $tags = _keyword_rules_extract_tags($form_values);
+  if ($tags === FALSE) {
+      return FALSE;
+  }
   $body = $form_values['body']['und'][0]['value'];
   if (!($nr_matches = preg_match_all('/<h(\d)>(.*?)<\/h\d>/i', $body, $matches, PREG_SET_ORDER))) {
     return 100;
@@ -134,15 +143,25 @@ function keyword_rules_headings($form_values) {
  *   The array of form values.
  */
 function _keyword_rules_extract_tags($form_values) {
-  switch (variable_get('keyword_rules_keywords_driver', 'cck')) {
-    case 'nodewords':
-      $keywords = $form_values['nodewords']['keywords'];
-      break;
-    default:
-      $keywords = $form_values[variable_get('keyword_rules_field_'. $form_values['type'], 'field_seo_keywords')]['und'][0]['value'];
-      break;
+  $keyword_field = variable_get('keyword_rules_field_'. $form_values['type'], 'disabled');
+  if ($keyword_field == 'disabled') {
+    return FALSE;
+  } else {
+    $field_instance = field_info_instance('node', $keyword_field, $form_values['type']);
+
+    switch ($field_instance['widget']['module']) {
+        case 'taxonomy':
+            $terms = $form_values[$keyword_field][$form_values['language']];
+            foreach ($terms as $term) {
+                $tags[] = $term['name'];
+            }
+            break;
+        default:
+            $keywords = $form_values[$keyword_field][$form_values['language']]['value'];
+            $tags = drupal_explode_tags(strtolower($keywords));
+    }
   }
-  return drupal_explode_tags(strtolower($keywords));
+  return $tags;
 }
 
 /**
