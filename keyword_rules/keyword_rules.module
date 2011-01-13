@@ -83,7 +83,7 @@ function keyword_rules_density($form_values) {
 
 /**
  * Checks if keywords are used in the node title. If they are used, the
- * resulting score depends on how early the keywords occur in the title. 
+ * resulting score depends on how early the keywords occur in the title.
  * If a keyword is used as the first word in the title, the score will be 100%.
  * @param object $form_values
  */
@@ -215,13 +215,21 @@ function keyword_rules_settings() {
   if (variable_get('keyword_rules_keywords_driver', 'cck') != 'cck') {
     $form['keyword_rules_cck']['#attributes']['style'] = 'display:none;';
   }
-  $form['keyword_rules_cck']['keyword_rules_keywords_field'] = array(
-    '#type' => 'select',
-    '#title' => t('Field defining the keywords'),
-    '#default_value' => variable_get('keyword_rules_keywords_field', 'field_seo_keywords'),
-    '#description' => t('Select the field that defines the keywords to be used for the checks.'),
-    '#options' => $fields,
-  );
+  if (count($fields) > 0) {
+    $form['keyword_rules_cck']['keyword_rules_keywords_field'] = array(
+      '#type' => 'select',
+      '#title' => t('Field defining the keywords'),
+      '#default_value' => variable_get('keyword_rules_keywords_field', 'field_seo_keywords'),
+      '#description' => t('Select the field that defines the keywords to be used for the checks.'),
+      '#options' => $fields,
+    );
+  } else {
+    $form['keyword_rules_cck']['notice'] = array(
+      '#type' => 'item',
+      '#title' => t('Notice'),
+      '#value' => t('There are no CCK fields that could be used to hold keywords. Please create a cck field of type text for at least one content type.'),
+    );
+  }
 
   return system_settings_form($form);
 }
