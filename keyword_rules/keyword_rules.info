@@ -1,4 +1,3 @@
-; $Id$
 name = Keyword Rules
 description = Keyword rule checks for the SEO compliance checker module
 dependencies[] = seo_checker

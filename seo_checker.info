@@ -1,4 +1,3 @@
-; $Id$
 name = SEO Compliance Checker
 description = Checks the SEO compliance of a node at it's creation/modification
 files[] = seo_checker.module

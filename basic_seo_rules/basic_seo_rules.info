@@ -1,4 +1,3 @@
-; $Id$
 name = 'Basic SEO Rules'
 description = 'Basic rules for the SEO compliance checker module'
 dependencies[] = "seo_checker"
