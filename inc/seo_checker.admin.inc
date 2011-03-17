@@ -11,11 +11,20 @@
  *
  * @return (array) permissions
  */
-function seo_checker_perm() {
+function seo_checker_permission() {
     return array(
-      'administer seo_checker configuration',
-      'skip seo checks',
-      'allow seo check failures'
+      'administer seo_checker configuration' => array(
+        'title' => t('Administer SEO Checker Configuration'),
+        'description' => t('Gives access to the configuration panel of the SEO Checker module.'),
+      ),
+      'skip seo checks' => array(
+        'title' => t('Skip SEO checks'),
+        'description' => t('Checks will be skipped completely for users with this permission.'),
+      ),
+      'allow seo check failures' => array(
+        'title' => t('Allow check failures'),
+        'description' => t('Lets publishers publish their content even if they fail some tests.'),
+      ),
     );
 }
 
