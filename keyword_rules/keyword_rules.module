@@ -94,7 +94,7 @@ function keyword_rules_title($form_values) {
 
   /* calculate percentage score */
   list($before, $after) = explode($best_tag, $title, 2);
-  preg_match_all  ('/\W+/', $before, $matches);
+  preg_match_all('/\W+/', $before, $matches);
   $words_before = count($matches[0]);
   if ($words_before == 0) {
     return 100;
@@ -136,6 +136,9 @@ function keyword_rules_headings($form_values) {
 
 /**
  * Helper function to extract keywords from the submitted form values.
+ * TODO: Could probably be improved by using functions from the core,
+ *       especially if we're dealing with taxomony terms.
+ *
  * @return
  *   An array of keyword tags.
  * @param object $form_values
@@ -149,13 +152,29 @@ function _keyword_rules_extract_tags($form_values) {
     $field_instance = field_info_instance('node', $keyword_field, $form_values['type']);
 
     switch ($field_instance['widget']['module']) {
-        case 'taxonomy':
-            $terms = $form_values[$keyword_field][$form_values['language']];
+      case 'taxonomy':
+        /* we always have an array of term names. */
+        $terms = $form_values[$keyword_field][$form_values['language']];
+        foreach ($terms as $term) {
+            $tags[] = $term['name'];
+        }
+        break;
+      case 'options':
+        $transposed = options_array_transpose($form_values[$keyword_field][$form_values['language']]);
+        if (isset ($transposed['tid'])) {
+          /* We assume that if we have an array of tids, these are taxonomy terms. */
+            $terms = taxonomy_term_load_multiple($transposed['tid']);
             foreach ($terms as $term) {
-                $tags[] = $term['name'];
+              $tags[] = $term->name;
             }
-            break;
-        default:
+        } else {
+          /* Otherwise let's assume that if we have a list of keywords. */
+          foreach (array_first($transposed) as $term) {
+            $tags[] = $term;
+          }
+        }
+        break;
+      default:
             $keywords = $form_values[$keyword_field][$form_values['language']][0]['value'];
             $tags = drupal_explode_tags(strtolower($keywords));
     }
