@@ -137,7 +137,7 @@ function seo_checker_perform_checks(&$form, $form_values) {
 
   $message = drupal_render($seo_check_results);
 
-  if (!$checks_passed && (!user_access('allow seo check failures', $user) || ($user->uid == 1 && variable_get('seo_checker_admin_allow_failurs', 0) == 0))) {
+  if (!$checks_passed && (!user_access('allow seo check failures', $user))) {
     form_set_error('check_results', t('The SEO compliance check was not successful. Check the table and modify your content as required.'));
     drupal_set_message($message);
   } else {

@@ -58,18 +58,6 @@ function seo_checker_settings() {
     ),
   );
 
-  $form['general']['seo_checker_admin_skip_checks'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Should the admin user skip SEO checks?'),
-    '#default_value' => variable_get('seo_checker_admin_skip_checks', 0),
-  );
-
-  $form['general']['seo_checker_admin_allow_failurs'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Should the admin user be allowed to fail SEO checks?'),
-    '#default_value' => variable_get('seo_checker_admin_allow_failurs', 0),
-  );
-
   $form['thresholds'] = array(
     '#type' => 'fieldset',
     '#title' => t('Thresholds for the SEO rules.'),
