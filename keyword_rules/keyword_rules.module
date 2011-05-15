@@ -174,9 +174,13 @@ function _keyword_rules_extract_tags($form_values) {
           }
         }
         break;
+      case 'metatags_quick':
+        $keywords = $form_values[$keyword_field][$form_values['language']][0]['metatags_quick'];
+        $tags = drupal_explode_tags(strtolower($keywords));
+        break;
       default:
-            $keywords = $form_values[$keyword_field][$form_values['language']][0]['value'];
-            $tags = drupal_explode_tags(strtolower($keywords));
+        $keywords = $form_values[$keyword_field][$form_values['language']][0]['value'];
+        $tags = drupal_explode_tags(strtolower($keywords));
     }
   }
   return $tags;
