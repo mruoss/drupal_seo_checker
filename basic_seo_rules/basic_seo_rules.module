@@ -7,7 +7,7 @@
  */
 
 /**
- * Implementation of hook_register_seo_rules().
+ * Implements hook_register_seo_rules().
  * @return (array) rules
  */
 function basic_seo_rules_register_seo_rules() {

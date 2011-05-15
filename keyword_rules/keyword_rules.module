@@ -8,7 +8,7 @@
  */
 
 /**
- * mplementation of hook_register_seo_rules()
+ * Implements hook_register_seo_rules().
  * @return (array) rules
  */
 function keyword_rules_register_seo_rules() {
@@ -78,7 +78,7 @@ function keyword_rules_title($form_values) {
   if ($tags === FALSE) {
       return FALSE;
   }
-  $title = strtolower($form_values['title']);
+  $title = drupal_strtolower($form_values['title']);
   $best_score = 1000; /* sentinel */
   $best_tag = NULL;
   foreach ($tags as $tag) {
@@ -181,11 +181,11 @@ function _keyword_rules_extract_tags($form_values) {
         break;
       case 'metatags_quick':
         $keywords = $form_values[$keyword_field][$form_values['language']][0]['metatags_quick'];
-        $tags = drupal_explode_tags(strtolower($keywords));
+        $tags = drupal_explode_tags(drupal_strtolower($keywords));
         break;
       default:
         $keywords = $form_values[$keyword_field][$form_values['language']][0]['value'];
-        $tags = drupal_explode_tags(strtolower($keywords));
+        $tags = drupal_explode_tags(drupal_strtolower($keywords));
     }
   }
   return $tags;

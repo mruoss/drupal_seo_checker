@@ -8,7 +8,7 @@
  */
 
 /**
- * Implementation of hook_install().
+ * Implements hook_install().
  */
 function keyword_rules_install() {
   $weight = db_result(db_query('SELECT weight FROM {system} WHERE name = "seo_checker"'));

@@ -37,7 +37,7 @@ function seo_checker_element_info() {
 }
 
 /**
- * Implementation of hook_theme().
+ * Implements hook_theme().
  */
 function seo_checker_theme($existing, $type, $theme, $path) {
   return array(

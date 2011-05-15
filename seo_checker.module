@@ -20,7 +20,7 @@ require_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'seo_checker') . '/in
 require_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'seo_checker') . '/inc/seo_checker.theme.inc';
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  *
  * @return array
  */
@@ -50,7 +50,7 @@ function seo_checker_node_form_validate($form, &$form_state) {
 }
 
 /**
- * Implementation of hook_form_alter().
+ * Implements hook_form_alter().
  * Add check results to the form if it has been submitted.
  */
 function seo_checker_form_alter(&$form, &$form_state, $form_id) {
@@ -180,7 +180,7 @@ function seo_checker_form_node_type_form_alter(&$form, $form_status) {
 }
 
 /**
- * Implementation of hook_init().
+ * Implements hook_init().
  */
 function seo_checker_init() {
   /* render the result table and append it to the form */

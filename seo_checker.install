@@ -7,7 +7,7 @@
  */
 
 /**
- * Implementation of hook_requirements().
+ * Implements hook_requirements().
  * @param string $phase
  */
 function seo_checker_requirements($phase) {
@@ -23,21 +23,21 @@ function seo_checker_requirements($phase) {
       $requirements['content_types']['title'] = $t('SEO Compliance Checker');
       $requirements['content_types']['value'] = $t('No Content Types Enabled');
       $requirements['content_types']['description'] = $t("In order for the SEO Compliance Checker to work you have to enable it for at least one content type.");
-      $requirements['content_types']['severity'] = REQUIREMENT_WARNING; 
+      $requirements['content_types']['severity'] = REQUIREMENT_WARNING;
     }
   }
   return $requirements;
 }
 
 /**
- * Implementation of hook_install().
+ * Implements hook_install().
  */
 function seo_checker_install() {
   variable_set('jquery_update_compression_type', 'none');
 }
 
 /**
- * Implementation of hook_update_N().
+ * Implements hook_update_N().
  */
 function seo_checker_update_7000() {
   $allow_failures = variable_get('seo_checker_allow_failures', 1);
