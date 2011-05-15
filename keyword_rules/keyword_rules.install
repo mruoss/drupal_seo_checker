@@ -1,4 +1,5 @@
 <?php
+// $Id$
 
 /**
  * @file
@@ -13,5 +14,3 @@ function keyword_rules_install() {
   $weight = db_result(db_query('SELECT weight FROM {system} WHERE name = "seo_checker"'));
   db_query("UPDATE {system} SET weight = %d WHERE name = 'keyword_rules'", ($weight+1));
 }
-
-?>

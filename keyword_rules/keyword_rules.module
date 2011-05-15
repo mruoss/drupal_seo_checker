@@ -1,4 +1,5 @@
 <?php
+// $Id$
 
 /**
  * @file
@@ -79,7 +80,7 @@ function keyword_rules_title($form_values) {
   }
   $title = strtolower($form_values['title']);
   $best_score = 1000; /* sentinel */
-  $best_tag = null;
+  $best_tag = NULL;
   foreach ($tags as $tag) {
     if (($score = seo_checker_wordipos($title, $tag)) !== FALSE && $score < $best_score) {
       $best_score = $score;
@@ -98,7 +99,8 @@ function keyword_rules_title($form_values) {
   $words_before = count($matches[0]);
   if ($words_before == 0) {
     return 100;
-  } else {
+  }
+  else {
     preg_match_all  ('/\W+/', $after, $matches);
     /* count the keyword itself as one oft he "words_after" */
     $words_after = count($matches[0])+1;
@@ -127,7 +129,8 @@ function keyword_rules_headings($form_values) {
     }
     if ($found > 0) {
       $good_weight += $found/$weight;
-    } else {
+    }
+    else {
       $bad_weight += 1/$weight;
     }
   }
@@ -145,10 +148,11 @@ function keyword_rules_headings($form_values) {
  *   The array of form values.
  */
 function _keyword_rules_extract_tags($form_values) {
-  $keyword_field = variable_get('keyword_rules_field_'. $form_values['type'], 'disabled');
+  $keyword_field = variable_get('keyword_rules_field_' . $form_values['type'], 'disabled');
   if ($keyword_field == 'disabled') {
     return FALSE;
-  } else {
+  }
+  else {
     $field_instance = field_info_instance('node', $keyword_field, $form_values['type']);
 
     switch ($field_instance['widget']['module']) {
@@ -167,7 +171,8 @@ function _keyword_rules_extract_tags($form_values) {
             foreach ($terms as $term) {
               $tags[] = $term->name;
             }
-        } else {
+        }
+        else {
           /* Otherwise let's assume that if we have a list of keywords. */
           foreach (array_first($transposed) as $term) {
             $tags[] = $term;
@@ -206,13 +211,13 @@ function keyword_rules_form_node_type_form_alter(&$form, $form_status) {
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#weight' => 1,
-      "#group"=> "additional_settings",
+      "#group" => "additional_settings",
     );
   }
   $form['seo_checker']['keyword_rules_field'] = array(
     '#type' => 'select',
     '#title' => t('Field defining the keywords'),
-    '#default_value' => variable_get('keyword_rules_field_'. $form['#node_type']->type, 0),
+    '#default_value' => variable_get('keyword_rules_field_' . $form['#node_type']->type, 0),
     '#description' => t('Select the field that defines the keywords to be used for the checks.'),
     '#options' => $fields,
   );

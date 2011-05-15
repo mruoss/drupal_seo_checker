@@ -1,4 +1,5 @@
 <?php
+// $Id$
 
 /**
  * @file
@@ -63,11 +64,11 @@ function seo_checker_theme($existing, $type, $theme, $path) {
 function theme_seo_check_results($element) {
   $element = $element['element'];
   $output = '<div class="seo-check-results">';
-  $output .= '<b>'.t('SEO Check Results').':</b>';
+  $output .= '<b>' . t('SEO Check Results') . ':</b>';
   $output .= theme(
     'table',
     array(
-      'header' => array(t('Rule'), t('Message'),t('Achieved'),t('Required'),t('Passed')),
+      'header' => array(t('Rule'), t('Message'), t('Achieved'), t('Required'), t('Passed')),
       'rows' => $element['#results'],
       'attributes' => array('class' => array('asdf')),
     )

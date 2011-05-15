@@ -1,4 +1,5 @@
 <?php
+// $Id$
 
 /**
  * @file
@@ -65,14 +66,14 @@ function seo_checker_settings() {
     '#description' => t('For the following rules, set the threshold in % where the test should be considered as passed. Depending on the type of the rule, you can either choose 0 or 100 sometimes a value in between. <b>A threshold of 0% disables a test.</b> Results of disabled tests will not be displayed.'),
   );
   foreach ($rules as $rid => $rule) {
-    $form['thresholds']['seo_threshold_'. $rid] = array(
-      '#type' => 'seo_slider_'.$rule['threshold type'],
+    $form['thresholds']['seo_threshold_' . $rid] = array(
+      '#type' => 'seo_slider_' . $rule['threshold type'],
       '#title' => check_plain($rule['name']),
       '#default' => seo_checker_get_rule_threshold($rule, $rid),
       '#description' => check_plain($rule['description']),
     );
     if ($rule['threshold type'] == 'bool') {
-      $form['thresholds']['seo_threshold_'. $rid]['#steps'] = 1;
+      $form['thresholds']['seo_threshold_' . $rid]['#steps'] = 1;
     }
   }
 
@@ -84,10 +85,10 @@ function seo_checker_settings() {
     '#description' => t('Enable the SEO Checker for at least one content type. Otherwise you will not see any effect.'),
   );
   foreach (_node_types_build()->types as $type) {
-    $form['content_types']['seo_checker_'.$type->type] = array(
+    $form['content_types']['seo_checker_' . $type->type] = array(
       '#type' => 'checkbox',
       '#title' => t($type->name),
-      '#default_value' => variable_get('seo_checker_'. $type->type, 0),
+      '#default_value' => variable_get('seo_checker_' . $type->type, 0),
     );
   }
 
@@ -100,6 +101,6 @@ function seo_checker_settings() {
  */
 function _seo_checker_load_slider() {
   drupal_add_library('system', 'ui.slider');
-  drupal_add_js(drupal_get_path('module', 'seo_checker') ."/js/slider.js");
-  drupal_add_css(drupal_get_path('module', 'seo_checker') ."/css/slider.css");
+  drupal_add_js(drupal_get_path('module', 'seo_checker') . '/js/slider.js');
+  drupal_add_css(drupal_get_path('module', 'seo_checker') . '/css/slider.css');
 }

@@ -1,4 +1,5 @@
 <?php
+// $Id$
 
 /**
  * @file
@@ -14,9 +15,9 @@ function seo_checker_requirements($phase) {
   $requirements = array();
 
   if ($phase == 'runtime') {
-    $ok = false;
+    $ok = FALSE;
     foreach (_node_types_build()->types as $type => $name) {
-      $ok |= variable_get('seo_checker_'. $type, 0);
+      $ok |= variable_get('seo_checker_' . $type, 0);
     }
     if (!$ok) {
       $requirements['content_types']['title'] = $t('SEO Compliance Checker');
@@ -42,7 +43,8 @@ function seo_checker_update_7000() {
   $allow_failures = variable_get('seo_checker_allow_failures', 1);
   if ($allow_failures == 0) {
     variable_set('seo_checker_allow_failures', 'no-failures');
-  } elseif ($allow_failures == 1) {
+  }
+  elseif ($allow_failures == 1) {
     variable_set('seo_checker_allow_failures', 'show-preview-only');
   }
   return array();
