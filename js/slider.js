@@ -13,4 +13,4 @@
       jQuery("#"+id+"_nr_0").text(ui.value+"%");
     }
   };
-});
+}) (jQuery);
