@@ -99,9 +99,7 @@ function seo_checker_settings() {
  * The slider requires some java scripts and css to be loaded
  */
 function _seo_checker_load_slider() {
-  if (module_exists('jquery_ui')) {
-    drupal_add_library('system', 'ui.slider');
-    drupal_add_js(drupal_get_path('module', 'seo_checker') ."/js/slider.js");
-  }
+  drupal_add_library('system', 'ui.slider');
+  drupal_add_js(drupal_get_path('module', 'seo_checker') ."/js/slider.js");
   drupal_add_css(drupal_get_path('module', 'seo_checker') ."/css/slider.css");
 }

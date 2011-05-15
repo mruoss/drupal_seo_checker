@@ -16,18 +16,17 @@
  * Defines the slider form element and its default values
  */
 function seo_checker_element_info() {
-  $jquery = module_exists('jquery_ui');
   $type['seo_slider_at_least'] = array(
     '#input' => TRUE,
     '#steps' => 100,
     '#size' => 3,
-    '#theme' => ($jquery ? 'seo_slider_at_least' : 'seo_slider_nojquery'),
+    '#theme' => 'seo_slider_at_least',
   );
   $type['seo_slider_range'] = array(
     '#input' => TRUE,
     '#steps' => 100,
     '#size' => 3,
-    '#theme' => ($jquery ? 'seo_slider_range' : 'seo_slider_nojquery'),
+    '#theme' => 'seo_slider_range',
   );
   $type['seo_check_results'] = array(
     '#results' => array(),
@@ -49,11 +48,6 @@ function seo_checker_theme($existing, $type, $theme, $path) {
     'seo_slider_range' => array(
        'render element' => 'element',
        'template' => 'slider-range',
-       'path' => "$path/theme",
-    ),
-    'seo_slider_nojquery' => array(
-       'render element' => 'element',
-       'template' => 'slider-nojquery',
        'path' => "$path/theme",
     ),
     'seo_check_results' => array(
