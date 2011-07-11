@@ -62,6 +62,7 @@ function seo_checker_theme($existing, $type, $theme, $path) {
  * value contains the check results, rendered as a table.
  */
 function theme_seo_check_results($element) {
+  drupal_add_css(drupal_get_path('module', 'seo_checker') . '/css/seo_checker.css');
   $element = $element['element'];
   $output = '<div class="seo-check-results">';
   $output .= '<b>' . t('SEO Check Results') . ':</b>';
