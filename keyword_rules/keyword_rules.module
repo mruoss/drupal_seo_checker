@@ -54,7 +54,7 @@ function keyword_rules_density($form_values) {
   if (count($tags) === 0) {
     return 0;
   }
-  $body = strip_tags($form_values['body']['und'][0]['value']);
+  $body = strip_tags($form_values['body'][$form_values['language']][0]['value']);
   $words = preg_split('/\W+/', $body);
   $total = count($words);
   $nr_of_tags = 0;
