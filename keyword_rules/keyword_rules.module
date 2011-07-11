@@ -27,6 +27,7 @@ function keyword_rules_register_seo_rules() {
     'threshold type' => 'at_least',
     'default threshold' => 50,
     'callback' => 'keyword_rules_title',
+    'callback arguments' => array('title'),
     'passed feedback' => t('Test passed.'),
     'failed feedback' => t('Test failed, place your keywords early in your node title.'),
   );
@@ -73,12 +74,12 @@ function keyword_rules_density($form_values) {
  * If a keyword is used as the first word in the title, the score will be 100%.
  * @param object $form_values
  */
-function keyword_rules_title($form_values) {
+function keyword_rules_title($form_values, $title_field = 'title') {
   $tags = _keyword_rules_extract_tags($form_values);
   if ($tags === FALSE) {
       return FALSE;
   }
-  $title = drupal_strtolower($form_values['title']);
+  $title = drupal_strtolower($form_values[$title_field]);
   $best_score = 1000; /* sentinel */
   $best_tag = NULL;
   foreach ($tags as $tag) {
