@@ -113,7 +113,7 @@ function keyword_rules_headings($form_values) {
   if ($tags === FALSE) {
       return FALSE;
   }
-  $body = $form_values['body']['und'][0]['value'];
+  $body = $form_values['body'][$form_values['language']][0]['value'];
   if (!($nr_matches = preg_match_all('/<h(\d)>(.*?)<\/h\d>/i', $body, $matches, PREG_SET_ORDER))) {
     return 100;
   }
