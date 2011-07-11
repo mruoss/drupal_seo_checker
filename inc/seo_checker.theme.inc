@@ -69,6 +69,7 @@ function seo_checker_preprocess_seo_slider(&$args) {
  * value contains the check results, rendered as a table.
  */
 function theme_seo_check_results($element) {
+  drupal_add_css(drupal_get_path('module', 'seo_checker') .'/css/seo_checker.css');
   $output = theme(
     'table',
     array(t('Rule'), t('Message'), t('Achieved'), t('Required'), t('Passed')),

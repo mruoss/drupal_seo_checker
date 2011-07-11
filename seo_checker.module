@@ -157,15 +157,6 @@ function seo_checker_form_node_type_form_alter(&$form, $form_status) {
   );
 }
 
-/**
- * Implementation of hook_init().
- */
-function seo_checker_init() {
-  /* render the result table and append it to the form */
-  drupal_add_css(drupal_get_path('module', 'seo_checker') .'/css/seo_checker.css');
-}
-
-
 /********************************** HELPERS **********************************/
 
 /**
