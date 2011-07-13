@@ -31,6 +31,18 @@ function keyword_rules_register_seo_rules() {
     'passed feedback' => t('Test passed.'),
     'failed feedback' => t('Test failed, place your keywords early in your node title.'),
   );
+  if (module_exists('page_title')) {
+    $rules['keyword_in_page_title'] = array(
+      'name' => t('Usage of keywords in page titles (Page Title Module)'),
+      'description' => t('Checks if at least one of the keywords is used in the page title. If a keyword is used in the title, the result of this test indicates how early in the title the keyword appears. A threshold of 100% means that a keyword must be the first word in a page title while a threshold of 50% requires keywords to be in the first half of the page title.'),
+      'threshold type' => 'at_least',
+      'default threshold' => 50,
+      'callback' => 'keyword_rules_title',
+      'callback arguments' => array('page_title'),
+      'passed feedback' => t('Test passed.'),
+      'failed feedback' => t('Test failed, place your keywords early in your page title.'),
+    );
+  }
   $rules['keyword_in_headings'] = array(
     'name' => t('Usage of keywords in headings'),
     'description' => t('Calculates the percentage of the heading-tags (e.g. &lt;h1&gt;,&lt;h2&gt;,...) in the node body that contain keywords.'),
@@ -76,8 +88,8 @@ function keyword_rules_density($form_values) {
  */
 function keyword_rules_title($form_values, $title_field = 'title') {
   $tags = _keyword_rules_extract_tags($form_values);
-  if ($tags === FALSE) {
-      return FALSE;
+  if ($tags === FALSE || !isset($form_values[$title_field])) {
+    return FALSE;
   }
   $title = drupal_strtolower($form_values[$title_field]);
   $best_score = 1000; /* sentinel */
