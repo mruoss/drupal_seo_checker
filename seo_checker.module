@@ -104,7 +104,15 @@ function seo_checker_perform_checks(&$form, &$form_values) {
       $threshold_text = '&#8712;&nbsp;['. $threshold[0] .'%,'. $threshold[1] .'%]';
     }
     /* here we apply the rules to the values. It should return an integer result. */
-    $check_result = round($rule['callback']($form_values));
+    $arguments = isset($rule['callback arguments']) ? $rule['callback arguments'] : array();
+    array_unshift($arguments, $form_values);
+    $check_result = call_user_func_array($rule['callback'], $arguments);
+
+    if ($check_result === FALSE) {
+      /* skip this rule */
+      continue;
+    }
+    $check_result = round($check_result);
 
     /* check if the submitted node has passed the test. */
     $passed = $check_result >= $threshold[0] && $check_result <= $threshold[1] ? 'passed' : 'failed';
