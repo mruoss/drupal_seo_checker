@@ -54,7 +54,7 @@ function seo_checker_node_form_validate($form, &$form_state) {
  * Add check results to the form if it has been submitted.
  */
 function seo_checker_form_alter(&$form, &$form_state, $form_id) {
-  if (strpos($form_id, 'node_form') && variable_get('seo_checker_' . $form['type']['#value'], 0) != 0) {
+  if (!empty($form['#node_edit_form']) && variable_get('seo_checker_' . $form['type']['#value'], 0) != 0) {
     $form['#validate'][] = 'seo_checker_node_form_validate';
   }
 }
