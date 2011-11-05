@@ -161,6 +161,7 @@ function keyword_rules_headings($form_values) {
  *   The array of form values.
  */
 function _keyword_rules_extract_tags($form_values) {
+  $tags = array();
   $keyword_field = variable_get('keyword_rules_field_' . $form_values['type'], 'disabled');
   if ($keyword_field == 'disabled') {
     return FALSE;
