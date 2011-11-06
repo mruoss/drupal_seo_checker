@@ -27,7 +27,6 @@ function keyword_rules_register_seo_rules() {
     'threshold type' => 'at_least',
     'default threshold' => 50,
     'callback' => 'keyword_rules_title',
-    'callback arguments' => array('title'),
     'passed feedback' => t('Test passed.'),
     'failed feedback' => t('Test failed, place your keywords early in your node title.'),
   );
@@ -37,8 +36,7 @@ function keyword_rules_register_seo_rules() {
       'description' => t('Checks if at least one of the keywords is used in the page title. If a keyword is used in the title, the result of this test indicates how early in the title the keyword appears. A threshold of 100% means that a keyword must be the first word in a page title while a threshold of 50% requires keywords to be in the first half of the page title.'),
       'threshold type' => 'at_least',
       'default threshold' => 50,
-      'callback' => 'keyword_rules_title',
-      'callback arguments' => array('page_title'),
+      'callback' => 'keyword_rules_page_title',
       'passed feedback' => t('Test passed.'),
       'failed feedback' => t('Test failed, place your keywords early in your page title.'),
     );
@@ -67,7 +65,7 @@ function keyword_rules_density($form_values) {
   if (count($tags) === 0) {
     return 0;
   }
-  $body = strip_tags($form_values['body'][$form_values['language']][0]['value']);
+  $body = strip_tags($form_values['body'][$form_values['body']['#language']][0]['value']['#value']);
   $words = preg_split('/\W+/', $body);
   $total = count($words);
   $nr_of_tags = 0;
@@ -86,12 +84,25 @@ function keyword_rules_density($form_values) {
  * If a keyword is used as the first word in the title, the score will be 100%.
  * @param object $form_values
  */
-function keyword_rules_title($form_values, $title_field = 'title') {
+function keyword_rules_title($form_values) {
   $tags = _keyword_rules_extract_tags($form_values);
-  if ($tags === FALSE || !isset($form_values[$title_field])) {
+  if ($tags === FALSE || !isset($form_values['title']['#value'])) {
     return FALSE;
   }
-  $title = drupal_strtolower($form_values[$title_field]);
+  $title = drupal_strtolower($form_values['title']['#value']);
+  return _keyword_rules_title($tags, $title);
+}
+
+function keyword_rules_page_title($form_values) {
+  $tags = _keyword_rules_extract_tags($form_values);
+  if ($tags === FALSE || !isset($form_values['page_title']['page_title']['#value'])) {
+    return FALSE;
+  }
+  $title = drupal_strtolower($form_values['page_title']['page_title']['#value']);
+  return _keyword_rules_title($tags, $title);
+}
+
+function _keyword_rules_title($tags, $title) {
   $best_score = 1000; /* sentinel */
   $best_tag = NULL;
   foreach ($tags as $tag) {
@@ -126,7 +137,7 @@ function keyword_rules_headings($form_values) {
   if ($tags === FALSE) {
       return FALSE;
   }
-  $body = $form_values['body'][$form_values['language']][0]['value'];
+  $body = $form_values['body'][$form_values['body']['#language']][0]['value']['#value'];
   if (!($nr_matches = preg_match_all('/<h(\d)>(.*?)<\/h\d>/i', $body, $matches, PREG_SET_ORDER))) {
     return 100;
   }
@@ -162,12 +173,12 @@ function keyword_rules_headings($form_values) {
  */
 function _keyword_rules_extract_tags($form_values) {
   $tags = array();
-  $keyword_field = variable_get('keyword_rules_field_' . $form_values['type'], 'disabled');
+  $keyword_field = variable_get('keyword_rules_field_' . $form_values['type']['#value'], 'disabled');
   if ($keyword_field == 'disabled') {
     return FALSE;
   }
   else {
-    $field_instance = field_info_instance('node', $keyword_field, $form_values['type']);
+    $field_instance = field_info_instance('node', $keyword_field, $form_values['type']['#value']);
 
     switch ($field_instance['widget']['module']) {
       case 'taxonomy':
@@ -194,11 +205,11 @@ function _keyword_rules_extract_tags($form_values) {
         }
         break;
       case 'metatags_quick':
-        $keywords = $form_values[$keyword_field][$form_values['language']][0]['metatags_quick'];
+        $keywords = $form_values[$keyword_field][$form_values[$keyword_field]['#language']][0]['metatags_quick']['#value'];
         $tags = drupal_explode_tags(drupal_strtolower($keywords));
         break;
       default:
-        $keywords = $form_values[$keyword_field][$form_values['language']][0]['value'];
+        $keywords = $form_values[$keyword_field][$form_values[$keyword_field]['#language']][0]['value']['#value'];
         $tags = drupal_explode_tags(drupal_strtolower($keywords));
     }
   }
