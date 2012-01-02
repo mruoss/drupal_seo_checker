@@ -193,13 +193,13 @@ function _keyword_rules_extract_tags($form_values) {
     switch ($field_instance['widget']['module']) {
       case 'taxonomy':
         /* we always have an array of term names. */
-        $terms = $form_values[$keyword_field][$form_values['language']];
+        $terms = $form_values[$keyword_field][$form_values[$keyword_field]['#language']];
         foreach ($terms as $term) {
             $tags[] = $term['name'];
         }
         break;
       case 'options':
-        $transposed = options_array_transpose($form_values[$keyword_field][$form_values['language']]);
+        $transposed = options_array_transpose($form_values[$keyword_field][$form_values[$keyword_field]['#language']]);
         if (isset ($transposed['tid'])) {
           /* We assume that if we have an array of tids, these are taxonomy terms. */
             $terms = taxonomy_term_load_multiple($transposed['tid']);
@@ -209,7 +209,7 @@ function _keyword_rules_extract_tags($form_values) {
         }
         else {
           /* Otherwise let's assume that if we have a list of keywords. */
-          foreach (array_first($transposed) as $term) {
+          foreach (array_pop($transposed) as $term) {
             $tags[] = $term;
           }
         }
