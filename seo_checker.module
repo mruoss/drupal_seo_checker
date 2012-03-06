@@ -45,17 +45,9 @@ function seo_checker_menu() {
   return $items;
 }
 
-function seo_checker_node_form_validate($form, &$form_state) {
-  seo_checker_perform_checks($node, $form_state['values']);
-}
-
-/**
- * Implements hook_form_alter().
- * Add check results to the form if it has been submitted.
- */
-function seo_checker_form_alter(&$form, &$form_state, $form_id) {
-  if (strpos($form_id, 'node_form') && variable_get('seo_checker_' . $form['type']['#value'], 0) != 0) {
-    $form['#validate'][] = 'seo_checker_node_form_validate';
+function seo_checker_node_validate($node, $form, &$form_state) {
+  if (variable_get('seo_checker_' . $form['type']['#value'], 0) != 0) {
+    seo_checker_perform_checks($node, $form);
   }
 }
 
@@ -74,7 +66,7 @@ function seo_checker_get_rule_threshold($rule, $rid) {
  * This is the main seo checker function. It checks the submitted node
  * by applying all the rules and includes the summary to the node form.
  */
-function seo_checker_perform_checks(&$form, $form_values) {
+function seo_checker_perform_checks($node, $form) {
   global $user;
 
   /* overall status */
@@ -105,7 +97,7 @@ function seo_checker_perform_checks(&$form, $form_values) {
 
     /* here we apply the rules to the values. It should return an integer result or FALSE if not applicable. */
     $arguments = isset($rule['callback arguments']) ? $rule['callback arguments'] : array();
-    array_unshift($arguments, $form_values);
+    array_unshift($arguments, $form);
     $check_result = call_user_func_array($rule['callback'], $arguments);
     if ($check_result === FALSE) {
       /* skip this rule */
@@ -152,7 +144,7 @@ function seo_checker_perform_checks(&$form, $form_values) {
         drupal_set_message($message);
         break;
       case 'show-preview-only':
-        if ($form_values['op'] == 'Preview') {
+        if ($node->op == 'Preview') {
           drupal_set_message($message);
         }
     }
