@@ -112,7 +112,7 @@ function seo_checker_perform_checks($node, $form) {
       'message' => $rule[$passed . ' feedback'],
       'achieved' => $check_result . '%',
       'required' => $threshold_text,
-      'passed' => '<img src="' . url(drupal_get_path('module', 'seo_checker') . '/img/' . $passed) . '.gif" alt="' . $passed . '" />',
+      'passed' => '<img src="' . file_create_url(drupal_get_path('module', 'seo_checker') . '/img/' . $passed) . '.gif" alt="' . $passed . '" />',
     );
 
     /* append the results to the array and update the overall status variable */
