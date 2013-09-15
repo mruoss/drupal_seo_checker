@@ -139,7 +139,7 @@ function keyword_rules_headings($form_values) {
   }
   $body = $form_values['body'][$form_values['body']['#language']][0]['value']['#value'];
   if (!($nr_matches = preg_match_all('/<h(\d)>(.*?)<\/h\d>/i', $body, $matches, PREG_SET_ORDER))) {
-    return 100;
+    return FALSE;
   }
 
   $good_weight = 0;
