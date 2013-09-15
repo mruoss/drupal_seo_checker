@@ -65,6 +65,10 @@ function keyword_rules_density($form_values) {
   if (count($tags) === 0) {
     return 0;
   }
+  if (!isset($form_values['body'])) {
+    // No body field on this node.
+    return FALSE;
+  }
   $body = strip_tags($form_values['body'][$form_values['body']['#language']][0]['value']['#value']);
   $words = preg_split('/\W+/', $body);
   $total = count($words);
@@ -136,6 +140,10 @@ function keyword_rules_headings($form_values) {
   $tags = _keyword_rules_extract_tags($form_values);
   if ($tags === FALSE) {
       return FALSE;
+  }
+  if (!isset($form_values['body'])) {
+    // No body field on this node.
+    return FALSE;
   }
   $body = $form_values['body'][$form_values['body']['#language']][0]['value']['#value'];
   if (!($nr_matches = preg_match_all('/<h(\d)>(.*?)<\/h\d>/i', $body, $matches, PREG_SET_ORDER))) {
