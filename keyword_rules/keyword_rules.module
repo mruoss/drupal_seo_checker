@@ -197,14 +197,10 @@ function _keyword_rules_extract_tags($form_values) {
 
     /* other CCK fields */
     $field_instance = field_info_instance('node', $keyword_field, $form_values['type']['#value']);
-
     switch ($field_instance['widget']['module']) {
       case 'taxonomy':
         /* we always have an array of term names. */
-        $terms = $form_values[$keyword_field][$form_values[$keyword_field]['#language']];
-        foreach ($terms as $term) {
-            $tags[] = $term['name'];
-        }
+        $tags = drupal_explode_tags(drupal_strtolower($form_values[$keyword_field][$form_values[$keyword_field]['#language']]['#value']));
         break;
       case 'options':
         $transposed = options_array_transpose($form_values[$keyword_field][$form_values[$keyword_field]['#language']]);
