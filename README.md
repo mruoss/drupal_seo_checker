@@ -1,6 +1,6 @@
-# SEO Complicance Checker
+# SEO Compliance Checker
 
-The SEO Compliance Checker is a [Drupal](http://drupa.org) module. It checks node content on search engine optimization upon its creation or modification. Whenever a publisher saves or previews a node, the module performs a set of checks and gives the user a feedback on the compliance of the rules. This module is supported by the [UFirst Group](http://www.ufirstgroup.com).
+The SEO Compliance Checker is a [Drupal](http://drupal.org) module. It checks node content on search engine optimization upon its creation or modification. Whenever a publisher saves or previews a node, the module performs a set of checks and gives the user a feedback on the compliance of the rules. This module is supported by the [UFirst Group](http://www.ufirstgroup.com).
 The module page can be found on [https://drupal.org/project/seo_checker](https://drupal.org/project/seo_checker).
 
 ## seo_checker.module
