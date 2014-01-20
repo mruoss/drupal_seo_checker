@@ -18,7 +18,7 @@ function basic_seo_rules_register_seo_rules() {
     'default threshold' => 100,
     'callback' => 'basic_seo_rules_alt_attribute',
     'passed feedback' => t('Test passed.'),
-    'failed feedback' => t('Test failed, please make sure your images contain an alternative text.'),
+    'failed feedback' => t('Test failed, please make sure your images contain alternative text.'),
   );
   $rules['title_attributes'] = array(
     'name' => t('Title attributes in <a href> - tags'),
@@ -40,23 +40,59 @@ function basic_seo_rules_register_seo_rules() {
  * @param array $form_values
  */
 function basic_seo_rules_alt_attribute($form_values) {
-  if (!isset($form_values['body'])) {
-    // No body field on this node.
-    return FALSE;
-  }
-
-  if (!preg_match_all('/<img[^>]+>/i', $form_values['body'][$form_values['body']['#language']][0]['value']['#value'], $matches)) {
-    return FALSE;
-  }
+  $lang = $form_values['language']['#value']; // get language as it will be used in various field references
   $total = 0;
   $successful = 0;
-  foreach ($matches[0] as $image_tag) {
-    if (preg_match('/alt=(\S{3,})/i', $image_tag)) {
-      $successful++;
-    }
-    $total++;
+ 
+  // find inline images in long text fields
+  $body = seo_checker_build_body($form_values, $lang); // collect content of all long text fields into $body
+  if ($body) {
+	preg_match_all('/<img[^>]+>/i', $body, $matches); // find img tags in body
+	foreach ($matches[0] as $image_tag) {
+	  if (preg_match('/alt=(\S{3,})/i', $image_tag)) {
+		$successful++;
+	  }
+	  $total++;
+	}
   }
-  return 100*$successful/$total;
+  
+  // find all the image fields
+  $types1 = array('field-type-image');
+  $img_fields = seo_checker_find_fields($form_values, $types1);
+
+  // then, if Field Collection module is in use, find image fields in field collections and add them to the array
+  if (module_exists('field_collection')) {
+	$types2 = array('field-type-field-collection');
+	$field_collections = seo_checker_find_fields ($form_values, $types2);
+	foreach ($field_collections as $field_collection) { // go through field collections, in case there are more than one
+	  foreach ($field_collection[$lang] as $fc_key => $fc_instance) { // go through instances of each field collection
+		if (is_int($fc_key)) {
+		  // It's a numbered instance of this field collection, and will have fields inside it that we need to check
+		  $fields_in_fc = seo_checker_find_fields ($fc_instance, $types1); // finding image within it
+		  foreach ($fields_in_fc as $fc_field) {
+			$img_fields[] = $fc_field;
+		  }
+		}
+	  }
+	}
+  }
+  
+  // now, check for alt text on all the image fields
+  foreach ($img_fields as $img_field) {
+    if ($img_field[$lang][0]['#file']) {
+      $total++;
+      // alt text can be stored in different places depending on the version of Drupal core and/or Media
+      if (isset($img_field[$lang][0]['#file']->alt) || isset($img_field[$lang][0]['alt']['#value'])) {
+        $successful++;
+      } 
+    }
+  }
+  
+  if ($total == 0) {
+    return FALSE; // no images in this node, either as fields or inline
+  } else {
+    return 100*$successful/$total;
+  }
 }
 
 /**
