@@ -207,9 +207,9 @@ function seo_checker_wordipos($haystack, $needle, $offset=0) {
  * machine names of types (e.g. 'field-type-text-long', 'field-type-text-with-summary', etc.).
  * Used in the seo_checker_build_body function (see below) and also in the alt attribute rule directly.
  */
-function seo_checker_find_fields($array, $types = NULL) {
+function seo_checker_find_fields($value_list, $types = NULL) {
   $fields = array();
-  foreach ($array as $key => $value) { // Walk through form values (or other array), finding fields
+  foreach ($value_list as $key => $value) { // Walk through form values (or other value list), finding fields
     if ((substr($key, 0, 6) == 'field_') or ($key == 'body')) { // it's a field
       if (!$types) { // no types specified
         $fields[] = $value;
@@ -236,8 +236,8 @@ function seo_checker_build_body($form_values, $lang) {
   $body = ""; // Declare body as an empty string first
 
   // then, find long text fields and add to $body
-  $types1 = array('field-type-text-long', 'field-type-text-with-summary');
-  $fields = seo_checker_find_fields($form_values, $types1);
+  $long_text_field_types = array('field-type-text-long', 'field-type-text-with-summary');
+  $fields = seo_checker_find_fields($form_values, $long_text_field_types);
   if ($fields) {
     foreach ($fields as $field) {
       $body .= strip_tags($field[$lang][0]['value']['#value']) . "\n\n";
@@ -246,8 +246,8 @@ function seo_checker_build_body($form_values, $lang) {
 
   // then, if Field Collection module is in use, find long text fields in field collections and add them too
   if (module_exists('field_collection')) {
-  $types2 = array('field-type-field-collection');
-  $field_collections = seo_checker_find_fields ($form_values, $types2);
+    $field_collection_field_types = array('field-type-field-collection');
+    $field_collections = seo_checker_find_fields($form_values, $field_collection_field_types);
   if ($field_collections) {
     foreach ($field_collections as $field_collection) {
       // go through field collections, in case there are more than one
@@ -255,7 +255,7 @@ function seo_checker_build_body($form_values, $lang) {
         // go through instances of each field collection
         if (is_int($fc_key)) {
           // It's a numbered instance of this field collection, and will have fields inside it that we need to check
-          $fields_in_fc = seo_checker_find_fields ($fc_instance, $types1); // finding long text fields within it
+          $fields_in_fc = seo_checker_find_fields ($fc_instance, $long_text_field_types); // finding long text fields within it
           if ($fields_in_fc) {
             foreach ($fields_in_fc as $fc_field) {
               $body .= strip_tags($fc_field[$lang][0]['value']['#value']) . "\n\n";
