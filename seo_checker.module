@@ -206,6 +206,9 @@ function seo_checker_wordipos($haystack, $needle, $offset=0) {
  * optionally, can be limited by type. If specifying type(s), $types should be an array of
  * machine names of types (e.g. 'field-type-text-long', 'field-type-text-with-summary', etc.).
  * Used in the seo_checker_build_body function (see below) and also in the alt attribute rule directly.
+ *
+ * @return array
+ *  Returns an array of fields which may be ampty
  */
 function seo_checker_find_fields($value_list, $types = NULL) {
   $fields = array();
@@ -220,16 +223,15 @@ function seo_checker_find_fields($value_list, $types = NULL) {
       }
     }
   }
-  if (empty($fields)) { // Node has no fields of the specified type(s)
-  return FALSE;
-  } else {
-    return $fields;
-  }
+  return $fields;
 }
 
 /**
  * Helper function to identify all long text (or long text with summary) fields and concatenate
  * them into a single string (used in alt attribute and keyword density rules).
+ *
+ * @return string
+ *   returns a string which may be empty
  */
 function seo_checker_build_body($form_values, $lang) {
 
@@ -238,17 +240,14 @@ function seo_checker_build_body($form_values, $lang) {
   // then, find long text fields and add to $body
   $long_text_field_types = array('field-type-text-long', 'field-type-text-with-summary');
   $fields = seo_checker_find_fields($form_values, $long_text_field_types);
-  if ($fields) {
-    foreach ($fields as $field) {
-      $body .= strip_tags($field[$lang][0]['value']['#value']) . "\n\n";
-    }
+  foreach ($fields as $field) {
+    $body .= strip_tags($field[$lang][0]['value']['#value']) . "\n\n";
   }
 
   // then, if Field Collection module is in use, find long text fields in field collections and add them too
   if (module_exists('field_collection')) {
     $field_collection_field_types = array('field-type-field-collection');
     $field_collections = seo_checker_find_fields($form_values, $field_collection_field_types);
-  if ($field_collections) {
     foreach ($field_collections as $field_collection) {
       // go through field collections, in case there are more than one
       foreach ($field_collection[$lang] as $fc_key => $fc_instance) {
@@ -256,20 +255,13 @@ function seo_checker_build_body($form_values, $lang) {
         if (is_int($fc_key)) {
           // It's a numbered instance of this field collection, and will have fields inside it that we need to check
           $fields_in_fc = seo_checker_find_fields ($fc_instance, $long_text_field_types); // finding long text fields within it
-          if ($fields_in_fc) {
-            foreach ($fields_in_fc as $fc_field) {
-              $body .= strip_tags($fc_field[$lang][0]['value']['#value']) . "\n\n";
-            }
+          foreach ($fields_in_fc as $fc_field) {
+            $body .= strip_tags($fc_field[$lang][0]['value']['#value']) . "\n\n";
           }
         }
       }
     }
   }
-  }
 
-  if (empty($body)) { // Node has no longtext fields
-    return FALSE;
-  } else {
-    return $body;
-  }
+  return $body;
 }

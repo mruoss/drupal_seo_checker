@@ -46,14 +46,12 @@ function basic_seo_rules_alt_attribute($form_values) {
 
   // find inline images in long text fields
   $body = seo_checker_build_body($form_values, $lang); // collect content of all long text fields into $body
-  if ($body) {
-    preg_match_all('/<img[^>]+>/i', $body, $matches); // find img tags in body
-    foreach ($matches[0] as $image_tag) {
-      if (preg_match('/alt=(\S{3,})/i', $image_tag)) {
-        $successful++;
-      }
-      $total++;
+  preg_match_all('/<img[^>]+>/i', $body, $matches); // find img tags in body
+  foreach ($matches[0] as $image_tag) {
+    if (preg_match('/alt=(\S{3,})/i', $image_tag)) {
+      $successful++;
     }
+    $total++;
   }
 
   // find all the image fields

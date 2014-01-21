@@ -70,7 +70,7 @@ function keyword_rules_density($form_values) {
   $lang = $form_values['language']['#value']; // This way it's not field-dependent, and we will use this value more than once
   $body = seo_checker_build_body($form_values, $lang);
 
-  if (!$body) { // Node has no longtext fields
+  if (empty($body)) { // Node has no longtext fields
     return FALSE;
   }
 
