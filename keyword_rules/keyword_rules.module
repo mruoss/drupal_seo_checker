@@ -14,7 +14,7 @@
 function keyword_rules_register_seo_rules() {
   $rules['keyword_density'] = array(
     'name' => 'Keyword density in the body',
-    'description' => 'Checks the density of keywords in the the body of a node, and other long-text fields. Remark: too high density is not a good SEO.',
+    'description' => 'Checks the density of keywords over the the body of a page. Remark: too high density is not a good SEO.',
     'threshold type' => 'range',
     'default threshold' => array(5, 20),
     'callback' => 'keyword_rules_density',
@@ -54,11 +54,10 @@ function keyword_rules_register_seo_rules() {
 }
 
 /**
- * Checks the density of keywords in the the body of a node, and other long-text fields
+ * Dervies the densitiy of keywords within the body of the node.
  * @param object $form_values
  */
 function keyword_rules_density($form_values) {
-
   $tags = _keyword_rules_extract_tags($form_values);
   if ($tags === FALSE) {
       return FALSE;
@@ -66,14 +65,11 @@ function keyword_rules_density($form_values) {
   if (count($tags) === 0) {
     return 0;
   }
-  
-  $lang = $form_values['language']['#value']; // This way it's not field-dependent, and we will use this value more than once
-  $body = seo_checker_build_body($form_values, $lang);
-  
-  if (!$body) { // Node has no longtext fields
-	return FALSE;
+  if (!isset($form_values['body'])) {
+    // No body field on this node.
+    return FALSE;
   }
-
+  $body = strip_tags($form_values['body'][$form_values['body']['#language']][0]['value']['#value']);
   $words = preg_split('/\W+/', $body);
   $total = count($words);
   $nr_of_tags = 0;
@@ -257,7 +253,7 @@ function keyword_rules_form_node_type_form_alter(&$form, $form_status) {
   if (!isset($form['seo_checker'])) {
     $form['seo_checker'] = array(
       '#type' => 'fieldset',
-      '#title' => t('SEO Compliance Checker'),
+      '#title' => t('SEO Complicance Checker'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#weight' => 1,

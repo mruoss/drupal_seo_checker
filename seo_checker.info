@@ -1,5 +1,5 @@
 name = SEO Compliance Checker
-description = Checks the SEO compliance of a node at its creation/modification
+description = Checks the SEO compliance of a node at it's creation/modification
 files[] = seo_checker.module
 files[] = seo_checker.install
 files[] = inc/seo_checker.admin.inc
